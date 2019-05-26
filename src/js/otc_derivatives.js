@@ -99,7 +99,7 @@
         oracle_type = document.createElement("p");
         oracle_type.value = "binary";
         if (false) { //defaults
-            oracle.value = "3f3ftvDWSiZ0FAfi0MUehAREZq/FHVnqtzsNb42+pys=";
+            oracle.value = "t4GdVZfFOhJZpOII/tW+YgreYm1n8+lgJ9Fy1bL9aZQ=";
             our_amount.value = "1";
             their_amount.value = "1";
             bet_direction.value = "true";

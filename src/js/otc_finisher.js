@@ -233,9 +233,14 @@
                 result = db.result;
             }
             var x = oracle_value(db, result);
+            db.contract_amount = x;
 	    return merkle.request_proof("accounts", db.address1, function(acc) {
                 nonce = acc[2]+1;
-	        var tx = ["ctc", db.address1, db.address2, db.fee, nonce+1, db.cid, x];
+	        //var tx = ["ctc", db.address1, db.address2, db.fee, nonce+1, db.cid, x];
+                var height = headers_object.top()[1];
+                var amount1 = db.channel_balance1 + x;
+                var amount2 = db.channel_balance2 - x;
+	        var tx = ["ctc2", db.address1, db.address2, db.fee, db.cid, amount1, amount2, height+100, height-1];
                 var stx = keys.sign(tx);
                 var imsg = [-6, early_close_code, db.oracle_type_val, result, stx];
                 var their_address_val = Object.keys(channels_object.channel_manager())[0];
@@ -256,9 +261,22 @@
         workspace.appendChild(br());
         workspace.appendChild(br());
     };
+    function calc_balances2(db, tx){
+        console.log(tx);
+        var your_balance, their_balance;
+        if (db.address1 == keys.pub()) {
+            var your_balance = tx[5];
+            var their_balance = tx[6];
+        } else {
+            var your_balance = tx[6];
+            var their_balance = tx[5];
+        }
+        return ("you will receive ").concat(s2c(your_balance)).concat(" veo, and they will receive ").concat(s2c(their_balance)).concat(" veo.");
+    }
     function calc_balances(db, tx_a) {
         var bAcc1 = db.channel_balance1 + tx_a;
         var bAcc2 = db.channel_balance2 - tx_a;
+        console.log(JSON.stringify([tx_a, db.channel_balance1, db.channel_balance1]));
         var your_balance, their_balance;
         if (db.address1 == keys.pub()) {
             your_balance = bAcc1;
@@ -282,19 +300,24 @@
             //console.log(tx[6]);
             //console.log(db.channel_balance1);
             var sctc = keys.sign(tx);
-            var tx_a = tx[1][6];
-            var balances_string = calc_balances(db, tx_a);
+            //var tx_a = tx[1][6];//
+            var tx_a = db.contract_amount;//
+            //var balances_string = calc_balances(db, tx_a);
+            var balances_string = calc_balances2(db, tx[1]);
             status.innerHTML = ("status: <font color=\"blue\">This proposal is for ending the channel at the final state of: ").concat(c[3]).concat("; ").concat(balances_string).concat("</font>");
             //status.innerHTML = ("status: <font color=\"blue\">This proposal is for ending the channel at the final state of: ").concat(c[3]).concat("; you will receive ").concat(s2c(your_balance)).concat(" veo, and they will receive ").concat(s2c(their_balance)).concat(" veo.").concat("</font>");
             //ctc_amount = tx[6];//to acc1
             var x = oracle_value(db, c[3]);
-            if (!(x == c[4][1][6])) {
+            var wa1 = db.channel_balance1 + x;
+            var wa2 = db.channel_balance2 - x;
+            if ((!(wa1 == c[4][1][5])) || (!(wa2 == c[4][1][6]))) {
+            //if (!(x == c[4][1][6])) {
                 status.innerHTML = ("status: <font color=\"red\">The final distribution of funds was miscalculated.</font>");
                 console.log(x);
                 console.log(c[4][1][6]);
                 return 0;
             };
-            if (!(c[4][1][5] == db.cid)) {
+            if (!(c[4][1][4] == db.cid)) {
                 status.innerHTML = ("status: <font color=\"error\">This tx is for closing the wrong channel.</font>");
                 console.log(db.cid);
                 console.log(c[4]);
@@ -304,7 +327,7 @@
         } else if (c.length == 4) {
             tx = c;
             var sctc = keys.sign(tx);
-            var ctc = sctc[1];
+            var ctc = sctc[1];//HERE
             var b = verify_both(sctc);
             if (!(b == true)) {
                 status.innerHTML = ("status: <font color=\"red\"> CTC tx has a bad signature</font>");
@@ -313,8 +336,6 @@
             }
             //var sctc = keys.sign(s1ctc);
             //console.log(sctc);
-            var ctc = sctc[1];
-            var b = verify_both(sctc);
             if (!(b == true)) {
                 status.innerHTML = ("status: <font color=\"red\"> CTC tx has a bad signature</font>");
                 //return we_send0(db);
@@ -334,13 +355,16 @@
                 status.innerHTML = ("status: <font color=\"red\"> CTC tx has a wrong fee</font>");
                 return 0;
             }
-            if (!(db.cid == ctc[5])) {
+            if (!(db.cid == ctc[4])) {
                 status.innerHTML = ("status: <font color=\"red\"> CTC tx has a wrong cid</font>");
                 return 0;
             }
             oracle_result(db, function(db, winnings) {
                 winnings = channel_result(db, winnings);
-                if (!(winnings == ctc[6])) {
+                var wa1 = db.channel_balance1 + winnings;
+                var wa2 = db.channel_balance2 - winnings;
+                if ((!(wa1 == ctc[5])) || (!(wa2 == ctc[6]))) {
+                    //if (!(winnings == ctc[6])) {//HERE and above
                     status.innerHTML = ("status: <font color=\"red\"> CTC tx has a wrong final balances.</font>");
                     return 0;
                 }
@@ -419,13 +443,13 @@
         return x;
     };
 */
-    function find_ctc(cid, txs) {
+    function find_ctc(cid, txs) {//HERE
         //[["signed",["ctc","BHpLwieFVdD5F/z1mdScC9noIZ39HgnwvK8jHqRSBxjzWBssIR1X9LGr8QxTi8fUQws1Q5CGnmTk5dZwzdrGBi4=","BOzTnfxKrkDkVl88BsLMl1E7gAbKK+83pHCt0ZzNEvyZQPKlL/n8lYLCXgrL4Mmi/6m2bzj+fejX8D52w4U9LkI=",152050,9,"S9dYt1Xk16RDL8nMtYf3MHHFGg1vya5zz7rsUsU/UiY=",0],"MEYCIQD7d9NEvdp5PcVxbYaipiPvw46La0GQD24COQi7vQ7E8QIhAO7ztOSJgqQyuiOD8VDmx/NKODMlPViW7/kI9CYHsWrT",[-6]]]
         if (JSON.stringify(txs) == "[]") {
             return "error";
         }
-        var cid2 = txs[0][1][5];
-        if (cid == cid2) {
+        var cid2 = txs[0][1][4];
+        if ((cid == cid2) && (txs[0][1][0] == "ctc2")) {
             return txs[0];
         }
         return find_ctc(cid, txs.slice(1));
