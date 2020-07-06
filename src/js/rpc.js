@@ -52,8 +52,8 @@ function variable_public_get(cmd, callback) {
 }
 function var_get(x, callback, cmd) {
     refresh_helper(x, cmd, callback, function(){
-	p = JSON.parse(xml_out(x));
-	callback(p[1]);
+    p = JSON.parse(xml_out(x));
+    callback(p[1]);
     }, 100);
 }
 function messenger(cmd, callback) {

@@ -1,4 +1,8 @@
-(function otc_finisher() {
+var amountOne;
+var amountTwo;
+
+
+var ZYX = (function otc_finisher() {
     var early_close_code = 5927;
     var div = document.createElement("div");
     document.body.appendChild(div);
@@ -26,9 +30,23 @@
     div.appendChild(br());
     //we need a tool for solo-closing the channel, for if your partner refuses to help you. (maybe for now asking for help on a forum is good enough?)
     function proposer_start() {
-        status.innerHTML = "status: <font color=\"red\">that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed.</font>";
+    //    status.innerHTML = "status: <font color=\"red\">that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed.</font>";
         
-        var x = JSON.parse(channel_proposal.value);
+    //    var x = JSON.parse(channel_proposal.value);
+    console.log("globalChannelOffer");
+    console.log(globalChannelOffer);
+
+          var x = JSON.parse(globalChannelOffer);
+
+        console.log("offer amounts:");
+        //console.log(channel_proposal.value);
+        console.log(x[1][7]);
+        console.log(x[1][8]);
+        amountOne = x[1][7];
+        amountTwo = x[1][8];
+
+        console.log(x[1]);
+
         var db = derivatives_load_db(x[1]);
         var period = default_period();
         var spk = spk_maker(db, 0, db.amount1 + db.amount2, period);
@@ -81,13 +99,15 @@
         db.amount = db.spk[7];
         console.log("lookup channel ");
         console.log(db.cid);
+        console.log("db amount here");
+        console.log(db.amount);
         workspace.innerHTML = "";
         merkle.request_proof("channels", db.cid, function(c) {
             console.log("channel is ");
             console.log(c);
             if ((c == 0) || (c == "empty")) {
-                status.innerHTML = "status: <font color=\"red\">that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed.</font>";
-                return 0;
+             //   status.innerHTML = "status: <font color=\"red\">that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed.</font>";
+             //   return 0;
             };
             status.innerHTML = "status: <font color=\"green\"> valid channel being loaded </font>";
             console.log(JSON.stringify(c));
@@ -105,8 +125,12 @@
                 div.appendChild(timeout_button);
                 //return 0;
             }
+
             db.channel_balance1 = c[4];
+
             db.channel_balance2 = c[5];
+            
+
             //db.channel_amount = c[6];
             var bet = db.spk[3][1];
             //console.log(JSON.stringify(bet));
@@ -255,13 +279,19 @@
         var early_button = button_maker2("generate a proposal to end the contract early and get your money out.", function() {
             //generate the signed ctc. send it along with the binary/scalar result used to generate it.
             var result;
+            console.log(db.result);
             if(db.result.value){
                 result = db.result.value;
             } else {
                 result = db.result;
             }
+            console.log("result");
+            console.log(result);
+            result = true;
+
             var x = oracle_value(db, result);
             console.log(JSON.stringify([result, x]));
+            console.log("channel blanace 1 :" + db.channel_balance1);
             //return oracle_value(db, result, function(x) {
 	    //return merkle.request_proof("accounts", db.address1, function(acc) {
             //nonce = acc[2]+1;
@@ -280,12 +310,36 @@
             console.log(odfv);
             //console.log(parseFloat(db.offer_delay_payment.value));
             
-            var offer_delay_payment = Math.round(100000000 * parseFloat(db.offer_delay_payment.value));
+     //       var offer_delay_payment = Math.round(100000000 * parseFloat(db.offer_delay_payment.value));
+                console.log(amount1);
+                console.log(amount2);
+               var offer_delay_payment = Math.round((Number(amountOne)+(Number(amountTwo)))*0.01);
+               var offer_delay_payment2;
+
+                console.log(offer_delay_payment);
+
+            var total = Number(amountOne) + Number(amountTwo);
+
             if (keys.pub() == db.address2) {
                 offer_delay_payment = -offer_delay_payment;
             }
+
+            if (keys.pub() == db.address2) {
+                offer_delay_payment = -offer_delay_payment;
+            }
+
+            if (keys.pub() == db.address2) {
+            var multA = 0.01;
+            var multB = 0.99;
+                }
+
+            if (keys.pub() == db.address1) {
+            var multA = 0.99;
+            var multB = 0.01;
+            }
+
             console.log(offer_delay_payment);
-	    var tx = ["ctc2", db.address1, db.address2, db.fee, db.cid, amount1 - offer_delay_payment, amount2 + offer_delay_payment, height+offer_delay, height];
+	    var tx = ["ctc2", db.address1, db.address2, db.fee, db.cid, Math.round(total*multA), Number(total) - Number(total*multA), height+offer_delay, height];
             console.log(JSON.stringify(tx));
             var stx = keys.sign(tx);
             var imsg = [-6, early_close_code, db.oracle_type_val, result, stx];
@@ -293,6 +347,9 @@
                 //return send_encrypted_message(imsg, their_address_val, function() {
             var balances_string = calc_balances2(db, tx[5], tx[6]);
             status.innerHTML = ("status: <font color=\"blue\">Successfully generated an offer to close the channel.").concat(balances_string).concat(" Tell your partner to visit this page. Do not delete your channel state yet. Click 'get headers' to see if the contract is settled yet. give this data to your partner: </font> ".concat(JSON.stringify(imsg)));
+            
+            globalChannelClose =  JSON.stringify(imsg);
+
             return wait_till_closed(db);
             //});
         });
@@ -677,11 +734,11 @@
             console.log("wait till closed");
             //console.log(c);
             if ((c == 0) || (c == "empty")) {
-                status.innerHTML = ("status: <font color=\"blue\">The channel is now closed. It is safe to delete your channel state file.</font>");
-                return 0;
-            } else {
+               // status.innerHTML = ("status: <font color=\"blue\">The channel is now closed. It is safe to delete your channel state file.</font>");
+              //  return 0;
+            } //else {
                 return headers_object.on_height_change(function() { return wait_till_closed(db); });
-            }
+        //    }
         });
     };
 /*
@@ -808,4 +865,7 @@
             });
         });
     }
+    return {proposer_start: proposer_start};
+
+
 })();
