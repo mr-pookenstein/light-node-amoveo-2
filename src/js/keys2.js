@@ -13,11 +13,20 @@ function keys_function1() {
     document.body.appendChild(account_title);
     document.body.appendChild(div);
     div.appendChild(load_text);
-    var file_selector = document.createElement("input");
-    file_selector.label = "dafsdf";
-    file_selector.type = "file";
-    file_selector.onchange = load_keys;
 
+
+
+    var file_selector = document.createElement("input");
+
+   // file_selector.name = "file_uploader";
+    file_selector.type = "file";
+
+    file_selector.onchange = load_keys;
+   // div.appendChild(Lab);
+var Lab = document.createElement("label");
+Lab.for = "file_uploader";
+file_selector.id = "file_uploader";
+Lab.innerHTML = "adsfds";
     div.appendChild(file_selector);
     //div.appendChild(br());
     if(configure["new_account"]){
