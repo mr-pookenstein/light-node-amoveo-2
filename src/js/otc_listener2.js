@@ -60,7 +60,7 @@ var CBA = (function otc_listener() {
     //div.appendChild(previous_button);
     */
     var contract_view = document.createElement("div");
-    div.appendChild(br());
+  //  div.appendChild(br());
     div.appendChild(contract_view);
     //contract_view.innerHTML = 0;
     /*

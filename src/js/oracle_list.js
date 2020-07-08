@@ -10,7 +10,7 @@ var abcd = (function() {
     div.appendChild(contract_div);
 
     var title1 = document.createElement("h3");
-    title1.innerHTML = "Trades";
+    title1.innerHTML = "Odds";
     div.appendChild(title1);
     var offers = document.createElement("div");
     div.appendChild(offers);
@@ -42,7 +42,8 @@ var abcd = (function() {
                     console.log(JSON.stringify(Oracle));
                     var t = text(atob(Oracle[1][4]));
                     var button = button_maker2("see odds", function() { return display_oracle(Oracle[1][2], Oracle[1][3]) });
-
+                    //adding some space
+ 
                     div.appendChild(t);
                     div.appendChild(button);
                                         div.appendChild(br());

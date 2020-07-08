@@ -27,7 +27,7 @@ var ZYX = (function otc_finisher2() {
  //   var proposers_button = button_maker2("load keys and channel proposal, then click this.", proposer_start);
   //  workspace.appendChild(proposers_button);
   //  workspace.appendChild(br());
-    div.appendChild(br());
+ //   div.appendChild(br());
     //we need a tool for solo-closing the channel, for if your partner refuses to help you. (maybe for now asking for help on a forum is good enough?)
     function proposer_start() {
     //    status.innerHTML = "status: <font color=\"red\">that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed.</font>";

@@ -3,18 +3,21 @@ var keys_internal;
 function keys_function1() {
     var ec = new elliptic.ec('secp256k1');
     keys_internal = new_keys();
-    var account_title = document.createElement("h3");
+    var account_title = document.createElement("div");
     account_title.innerHTML = "account ";
     var div = document.createElement("div");
     var save_name = document.createElement("input");
     save_name.type = "text";
     save_name.value = "Amoveo private key";
     var load_text = document.createTextNode("");
-    document.body.appendChild(account_title);
+//    document.body.appendChild(account_title);
     document.body.appendChild(div);
     div.appendChild(load_text);
 
-
+    var balance_button = button_maker2("check balance ", update_balance);
+    var bal_div = document.createElement("h3");
+    //div.appendChild(br());
+    div.appendChild(bal_div);
 
     var file_selector = document.createElement("input");
 
@@ -27,7 +30,7 @@ var Lab = document.createElement("label");
 Lab.for = "file_uploader";
 file_selector.id = "file_uploader";
 Lab.innerHTML = "adsfds";
-    div.appendChild(file_selector);
+
     //div.appendChild(br());
     if(configure["new_account"]){
         var save_button = button_maker2("Generate new account. Saves the private key to a file.", save_keys);
@@ -45,12 +48,12 @@ Lab.innerHTML = "adsfds";
         var download_key_button = button_maker2("Download Key", function() { return save_keys()});
     var pub_div = document.createElement("div");
   //      pub_div.appendChild(copy_address_button);
-    div.appendChild(br());
+   // div.appendChild(br());
     div.appendChild(pub_div);
         div.appendChild(copy_address_button);
         div.appendChild(set_key_button);
         div.appendChild(download_key_button);
-
+    div.appendChild(file_selector);
 function setDefaultKey(){
     console.log("setting default key");
     pushtolocal();
@@ -65,29 +68,26 @@ function copy_address(){
 
     if(configure["new_account"]){
         var new_pubkey_button = button_maker2("generate keys from passphrase", new_keys_check);
-        div.appendChild(br());
+    //    div.appendChild(br());
         div.appendChild(save_name);
         //div.appendChild(br());
         div.appendChild(save_button);
-        div.appendChild(br());
+   //     div.appendChild(br());
     }
     if(configure["watch_only_account"]){
         div.appendChild(watch_only_instructions);
         div.appendChild(watch_only_pubkey);
         div.appendChild(watch_only_button);
-        div.appendChild(br());
+    //    div.appendChild(br());
     };
     var new_pubkey_div = document.createElement("div");
     if(configure["new_account"]){
         div.appendChild(new_pubkey_button);
         div.appendChild(new_pubkey_div);
-        div.appendChild(br());
+     //   div.appendChild(br());
 
     };
-    var balance_button = button_maker2("check balance ", update_balance);
-    var bal_div = document.createElement("div");
 
-    div.appendChild(bal_div);
   //  div.appendChild(balance_button);
     //append_children(div, [bal_div, balance_button]);
 
@@ -250,7 +250,7 @@ function copy_address(){
 
                     C = 0;
 
-                var S = ("your balance: ").concat(
+                var S = ("Balance: ").concat(
                     (C).toString()).concat(
                         " VEO");
                 if (!(C == U)) {
@@ -266,7 +266,7 @@ function copy_address(){
 
 
                 //set_balance(C);
-                var S = ("your balance: ").concat(
+                var S = ("Balance: ").concat(
                     (C).toString()).concat(
                         " VEO");
                 if (!(C == U)) {
@@ -280,7 +280,7 @@ function copy_address(){
         });
     }
     function set_balance(n) {
-        bal_div.innerHTML = ("your balance: ").concat((n).toString()) + " VEO";
+        bal_div.innerHTML = ("Balance: ").concat((n).toString()) + " VEO";
     }
     function save_keys() {
         download(keys_internal.getPrivate("hex"), save_name.value, "text/plain");
