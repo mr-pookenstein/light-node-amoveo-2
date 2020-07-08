@@ -64,7 +64,7 @@ function messenger(cmd, callback) {
 
 function request(cmd, u, callback) {
     var xmlhttp=new XMLHttpRequest();
-    xmlhttp.onreadystatechange = callback;
+    //xmlhttp.onreadystatechange = callback;
     xmlhttp.open("POST",u,true);
     xmlhttp.send(JSON.stringify(cmd));
     return request2(xmlhttp, cmd, u, callback, 100);

@@ -145,6 +145,7 @@ var abcd = (function() {
             console.log("trying to broadcast the offer");
 
             CBA.cp_start();
+            keys.update_balance();
 /*
             var oid = plus_encode(h[2]);
             var UL = C[1][1][18];
