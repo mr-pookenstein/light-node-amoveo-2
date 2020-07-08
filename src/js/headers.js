@@ -63,9 +63,10 @@ function headers_main() {
     
     var top_diff = 0;//accumulative difficulty of top
     var button = button_maker2("sync with network", more_headers);
-    document.body.appendChild(button);
+ //   document.body.appendChild(button);
     wallet_text = document.createElement("p");
-    wallet_text.innerHTML = JSON.stringify([["height", 0], ["total work", 0]]);
+    //wallet_text.innerHTML = JSON.stringify([["height", 0], ["total work", 0]]);
+    wallet_text.innerHTML = "Downloading blockchain data";
     document.body.appendChild(wallet_text);
     //more_headers()
     function write_header(header, ewah) {
@@ -75,7 +76,8 @@ function headers_main() {
             top_diff = acc_difficulty;
             top_header = header;
 	    //console.log("wallet text update");
-            wallet_text.innerHTML = JSON.stringify([["height", header[1]], ["total work", (Math.floor(header[9]/100000000))]]);
+           // wallet_text.innerHTML = JSON.stringify([["height", header[1]], ["total work", (Math.floor(header[9]/100000000))]]);
+            wallet_text.innerHTML = "Current Height: "+ header[1];
         }
         h = hash(serialize_header(header));
         headers_db[h] = [header, ewah];

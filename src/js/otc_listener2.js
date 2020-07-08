@@ -2,12 +2,12 @@
 
 var globalChannelOffer;
 
-(function otc_listener() {
+var CBA = (function otc_listener() {
     var div = document.createElement("div");
     document.body.appendChild(div);
     var title2 = document.createElement("h3");
     title2.innerHTML = "accept trade";
-    div.appendChild(title2);
+   // div.appendChild(title2);
 
     
  /*   var load_button = document.createElement("input");
@@ -26,10 +26,13 @@ var globalChannelOffer;
 
     
     var start_button = button_maker2("Go", cp_start);
-    var cp_text = text_input("Paste trade offer here: ", div);
-    div.appendChild(br());
-    div.appendChild(start_button);
-    div.appendChild(br());
+    console.log("channel proposal text:" + globalChannelOffer);
+    //var cp_text = globalChannelOffer;
+  // HERE //  var cp_text = text_input("accept trade offer and broadcast 99% channel close", div);
+
+  //  div.appendChild(br());
+   // div.appendChild(start_button);
+  //  div.appendChild(br());
 
 
 
@@ -81,9 +84,13 @@ var globalChannelOffer;
     */
     function cp_start() {
         
-        globalChannelOffer = cp_text.value;
-        var x = JSON.parse(cp_text.value);
+        //globalChannelOffer = cp_text.value;
 
+        console.log(globalChannelOffer);
+
+        //var x = JSON.parse(cp_text.value);
+        //var x = JSON.parse(cp_text.value);
+        var x = globalChannelOffer;
         var msg = x[1];
         var signed_nc_offer = x[2];
         //msg[11] is signedPD
@@ -321,4 +328,7 @@ var globalChannelOffer;
             status.innerHTML = "status: <font color=\"green\">The channel has been formed, and the smart contract is active. If you have saved a copy of the signed smart contract, then it is now safe to close the browser.</font>";
         });
     }
+
+    return {cp_start: cp_start};
+
 })();

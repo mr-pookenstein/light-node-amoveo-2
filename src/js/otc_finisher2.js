@@ -34,8 +34,8 @@ var ZYX = (function otc_finisher2() {
           console.log("globalChannelOffer");
     console.log(globalChannelOffer);  
     //    var x = JSON.parse(channel_proposal.value);
-          var x = JSON.parse(globalChannelOffer);
-
+          //var x = JSON.parse(globalChannelOffer);
+          var x = globalChannelOffer;
         console.log("offer amounts:");
         //console.log(channel_proposal.value);
         console.log(x[1][7]);
@@ -156,7 +156,7 @@ var ZYX = (function otc_finisher2() {
                     status.innerHTML = ("status: <font color=\"red\"> The bet, on oracle ID: ").concat(db.oid).concat(" , this oracle has not been created yet.</font>");
                     db.result = text_input("result of the oracle: ", workspace);
                     db.offer_delay_field = text_input("how many blocks till this proposal should expire: ", workspace);
-                    db.offer_delay_field.value = "100";
+                    db.offer_delay_field.value = "10000";
                     db.offer_delay_payment = text_input("how much should we offer to pay them for settling the contract early: ", workspace);
                     db.offer_delay_payment.value = "0";
                     return close_early_view(db);
@@ -172,7 +172,7 @@ var ZYX = (function otc_finisher2() {
                             db.result = text_input("final price of the asset: ", workspace);
                         }
                         db.offer_delay_field = text_input("how many blocks till this proposal should expire: ", workspace);
-                        db.offer_delay_field.value = "100";
+                        db.offer_delay_field.value = "10000";
                         db.offer_delay_payment = text_input("how much should we offer to pay them for settling the contract early: ", workspace);
                         db.offer_delay_payment.value = "0";
                         return close_early_view(db);
