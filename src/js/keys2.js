@@ -54,6 +54,8 @@ Lab.innerHTML = "adsfds";
         div.appendChild(set_key_button);
         div.appendChild(download_key_button);
     div.appendChild(file_selector);
+    div.appendChild(br());
+        div.appendChild(br());
 function setDefaultKey(){
     console.log("setting default key");
     pushtolocal();

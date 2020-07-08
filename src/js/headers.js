@@ -67,7 +67,7 @@ function headers_main() {
     wallet_text = document.createElement("div");
     //wallet_text.innerHTML = JSON.stringify([["height", 0], ["total work", 0]]);
     wallet_text.innerHTML = "Downloading blockchain data";
-    document.body.appendChild(wallet_text);
+    //document.body.appendChild(wallet_text);
    // wallet_text.style.cssFloat = 'right';
     //more_headers()
     function write_header(header, ewah) {
