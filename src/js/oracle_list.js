@@ -40,13 +40,66 @@ var abcd = (function() {
                     console.log("non existant oracle.");
                 } else {
                     console.log(JSON.stringify(Oracle));
-                    var t = text(atob(Oracle[1][4]));
+                    console.log(atob(Oracle[1][4]));
+                    var oracle_text = atob(Oracle[1][4]);
+                    //determine if it is bitcoin put or call
+                    console.log(oracle_text.search("as reported by Close price as of "));
+                    console.log(oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/"));
+                    var t;
+                    if (( (oracle_text.search("bitcoin price is more than ") == 0) || (oracle_text.search("bitcoin price is less than ") == 0)) && (oracle_text.search("as reported by Close price as of ") >= 33) && (oracle_text.search("as reported by Close price as of ") <= 35) && (oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/") >= 77) && (oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/") <= 79)) {
+                        console.log("oracle text success");
+                        console.log();
+                            var price = oracle_text.slice(26,33);
+                            console.log(price);
+                            console.log("price testing");
+                            console.log(price[price.length-1] == " ");
+                            console.log(price[price.length]);
+                            if ((price[1] == "$") && (price[0] == " ") && (price[price.length-1] == " ")){
+                            console.log(price.slice(2,price.length-1));
+                            console.log(price.search(" "));
+
+                            var coinPrice = price.slice(2,price.length-1);
+
+
+                            console.log("date testing");
+
+                            console.log(oracle_text.slice(oracle_text.search("as reported by Close price as of ")+("as reported by Close price as of ").length,oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/")));
+                            var dateValue = oracle_text.slice(oracle_text.search("as reported by Close price as of ")+("as reported by Close price as of ").length,oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/"));
+                            
+                            console.log(dateValue.slice(0,3));
+                            if ((dateValue.slice(0,3) == "Jul") || (dateValue.slice(0,3) == "Aug") || (dateValue.slice(0,3) == "Sep") || (dateValue.slice(0,3) == "Oct") ){
+                                    console.log("success!");
+                                    console.log(oracle_text.slice(17,21));
+                            var callorput;
+
+                            if (oracle_text.slice(17,21) == "more"){
+
+                            callorput =  "call";
+                            
+                            } else if (oracle_text.slice(17,21) == "less"){
+                                callorput = "put";
+                            }
+
+                            t = text("Bitcoin ".concat(callorput)+ " option | Strike: $"+ coinPrice+" | Maturity: Midnight "+dateValue+" GMT | ");
+                            }
+                            }
+                            
+                    }else{t = text(atob(Oracle[1][4]));
+                    }
+                        
+
+                    
+
+                    console.log("this is t");
+                    console.log(t);
+                    console.log(t[0]);
                     var button = button_maker2("see odds", function() { return display_oracle(Oracle[1][2], Oracle[1][3]) });
                     //adding some space
- 
+
                     div.appendChild(t);
                     div.appendChild(button);
                                         div.appendChild(br());
+                    
 
                 };
                 display_oracles(l.slice(1));

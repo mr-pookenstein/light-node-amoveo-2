@@ -372,6 +372,7 @@ function headers_main() {
             n = top_header[1];
         }
         variable_public_get(["headers", headers_batch + 1, n], absorb_headers);
+        //this next line will error out the first time it is run
         keys.update_balance();
     }
     function serialize_header(x) {

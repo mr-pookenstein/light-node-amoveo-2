@@ -44,7 +44,7 @@ Lab.innerHTML = "adsfds";
     }
 
         var copy_address_button = button_maker2("Copy Address", function() { return copy_address()});
-        var set_key_button = button_maker2("Set to Default", function() { return setDefaultKey()});
+        var set_key_button = button_maker2("Set as Default", function() { return setDefaultKey()});
         var download_key_button = button_maker2("Download Key", function() { return save_keys()});
     var pub_div = document.createElement("div");
   //      pub_div.appendChild(copy_address_button);
