@@ -17,8 +17,8 @@ console.log(localStorage.getItem('privkey'));
 
 if (keys.pub().length > 0){
 	console.log("updating balance");
-	keys.update_balance();
-	keys.update_pubkey();
+//	keys.update_balance();
+//	keys.update_pubkey();
 }
 //console.log("refreshing blocks");
 

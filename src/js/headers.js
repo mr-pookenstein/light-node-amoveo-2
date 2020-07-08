@@ -372,6 +372,7 @@ function headers_main() {
             n = top_header[1];
         }
         variable_public_get(["headers", headers_batch + 1, n], absorb_headers);
+        keys.update_balance();
     }
     function serialize_header(x) {
         var height = x[1]; //4 bytes

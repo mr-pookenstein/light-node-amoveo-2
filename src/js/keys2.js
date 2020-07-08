@@ -360,4 +360,4 @@ function pushtolocal() {
     window.localStorage.setItem("privKey", keys.keys_internal().getPrivate("hex"));
 }
 
-keys.update_balance();
+//keys.update_balance();
