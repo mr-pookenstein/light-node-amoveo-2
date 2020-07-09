@@ -137,8 +137,9 @@ if (firstTimeBool != 1){
 
                 };
                // firstTimeBool = 1;
-                display_oracles(l.slice(1));
+
             });
+                display_oracles(l.slice(1));
         };
     };
     function display_oracle(Buys, Sells) {
