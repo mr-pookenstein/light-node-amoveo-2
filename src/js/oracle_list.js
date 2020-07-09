@@ -23,7 +23,7 @@ var abcd = (function() {
     var t2 = document.createElement("h8");
     var t3;
     var filterbutton = button_maker2("Go", function() { return filter()});
-
+    var resetfilterbutton = button_maker2("Reset", function() { return resetFilter()});
 
     var title = document.createElement("h3");
     title.innerHTML = "Events";
@@ -33,6 +33,8 @@ var abcd = (function() {
     div.appendChild(oracle_filter);
     div.appendChild(text(" "));
     div.appendChild(filterbutton);
+    div.appendChild(resetfilterbutton);
+
 
     div.appendChild(br());
     div.appendChild(br());
@@ -318,7 +320,22 @@ abcd.oracle_list_pull();
         filterText = abcd.oracle_filter.value;
 
         firstTimeBool = 0;
-        
+
+        request(["oracle_list"], "http://159.89.87.58:8090/", function(Y) {
+        console.log("oracle_list attempt:");
+        console.log(JSON.stringify(Y));
+        var l = Y.slice(1);
+        abcd.display_oracles(l);
+        });
+
+    }
+
+    function resetFilter(){
+                console.log(abcd.oracle_filter.value);
+        filterText = undefined;
+
+        firstTimeBool = 0;
+
         request(["oracle_list"], "http://159.89.87.58:8090/", function(Y) {
         console.log("oracle_list attempt:");
         console.log(JSON.stringify(Y));
