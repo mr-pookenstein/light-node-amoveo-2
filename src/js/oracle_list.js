@@ -33,11 +33,27 @@ var abcd = (function() {
     div.appendChild(oracle_filter);
     div.appendChild(text(" "));
     div.appendChild(filterbutton);
+    div.appendChild(text(" "));
     div.appendChild(resetfilterbutton);
 
 
     div.appendChild(br());
     div.appendChild(br());
+
+    div.appendChild(text("Presets: "));
+    var optionPresetButton1 = button_maker2("Coin Put Options", function() { return PresetFilter("option put Strike Maturity Midnight GMT")});
+    var optionPresetButton2 = button_maker2("Coin Call Options", function() { return PresetFilter("option call Strike Maturity Midnight GMT")});
+    
+    var nbaPresetButton = button_maker2("NBA", function() { return PresetFilter("nba")});
+    div.appendChild(optionPresetButton1);
+    div.appendChild(text(" "));
+        div.appendChild(optionPresetButton2);
+    div.appendChild(text(" "));
+    div.appendChild(nbaPresetButton);
+
+    div.appendChild(br());
+    div.appendChild(br());
+
     var oracles = document.createElement("div");
     div.appendChild(oracles);
     //oracles.innerHTML = "test";
@@ -150,20 +166,26 @@ if (firstTimeBool != 1){
                         //check if strings match
                         console.log("filter text is: " + filterText);
                         //start slicing filterText
-
+                        var increment2;
+                        increment2 = 0;
                         var increment;
-                        increment = 0;
+                        ;
                         var lengthSplit = (filterText.split(" ")).length;
                         console.log(lengthSplit);
 
-                    //    for (increment < lengthSplit );
-                        if (t3.search((filterText.split(" "))[0]) < 0){
+                //    for (i = 0; i < cars.length; i++) {
+                //    text += cars[i] + "<br>";
+                //    }
 
-                            increment = increment + 1;
+                        for (increment = 0; increment < lengthSplit; increment++ ){;
+                        
+                        if (t3.search((filterText.split(" "))[increment]) < 0){
+
+                            increment2 = increment2 + 1;
 
                         }
-
-                        if (increment < 1) {
+}
+                        if (increment2 < 1) {
                         oracles.appendChild(t2);
                         oracles.appendChild(button);
                         oracles.appendChild(br());
@@ -333,6 +355,23 @@ abcd.oracle_list_pull();
     function resetFilter(){
                 console.log(abcd.oracle_filter.value);
         filterText = undefined;
+        abcd.oracle_filter.value = "";
+        firstTimeBool = 0;
+
+        request(["oracle_list"], "http://159.89.87.58:8090/", function(Y) {
+        console.log("oracle_list attempt:");
+        console.log(JSON.stringify(Y));
+        var l = Y.slice(1);
+        abcd.display_oracles(l);
+        });
+
+    }
+
+    function PresetFilter(x){
+
+                console.log(abcd.oracle_filter.value);
+        filterText = x;
+        abcd.oracle_filter.value = x;
 
         firstTimeBool = 0;
 
