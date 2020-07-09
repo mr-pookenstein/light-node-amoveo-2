@@ -1,5 +1,7 @@
 
 var firstTimeBool;
+var filterText;
+
 var abcd = (function() {
     var div = document.createElement("div");
     document.body.appendChild(div);
@@ -19,11 +21,21 @@ var abcd = (function() {
     
     var oracleDoc = document.createElement("h8");
     var t2 = document.createElement("h8");
+    var t3;
+    var filterbutton = button_maker2("Go", function() { return filter()});
+
 
     var title = document.createElement("h3");
     title.innerHTML = "Events";
     div.appendChild(title);
+    var oracle_filter = document.createElement("INPUT");
+    div.appendChild(text("Filter: "));
+    div.appendChild(oracle_filter);
+    div.appendChild(text(" "));
+    div.appendChild(filterbutton);
 
+    div.appendChild(br());
+    div.appendChild(br());
     var oracles = document.createElement("div");
     div.appendChild(oracles);
     //oracles.innerHTML = "test";
@@ -104,36 +116,58 @@ if (firstTimeBool != 1){
                             }
 
                             t2 = text("Bitcoin ".concat(callorput)+ " option | Strike: $"+ coinPrice+" | Maturity: Midnight "+dateValue+" GMT | ");
+                            t3 = "Bitcoin ".concat(callorput)+ " option | Strike: $"+ coinPrice+" | Maturity: Midnight "+dateValue+" GMT | ";
                             }
                             }
                             
                     }else{t2 = text(atob(Oracle[1][4]));
-                    }
+                          t3 = atob(Oracle[1][4]);                          
+                                                        }
                         
 
                     
 
                     console.log("this is t");
-                    console.log(t2);
+                    console.log(t3);
+                    console.log((t3.split(" ")));
+                                            console.log((t3.split(" "))[0]);
                     console.log(t2[0]);
                     var button = button_maker2("see odds", function() { return display_oracle(Oracle[1][2], Oracle[1][3]) });
                     //adding some space
                     console.log("firstTimeBool: " + firstTimeBool);
-                    if (firstTimeBool > 0){
+                    console.log(filterText === undefined);
+                    if (filterText === undefined){
 
                     oracles.appendChild(t2);
                     oracles.appendChild(button);
                     oracles.appendChild(br());
 
+                    
                     }else{
 
+                        //check if strings match
+                        console.log("filter text is: " + filterText);
+                        //start slicing filterText
 
-                    oracles.appendChild(t2);
-                    oracles.appendChild(button);
-                    oracles.appendChild(br());
+                        var increment;
+                        increment = 0;
+                        var lengthSplit = (filterText.split(" ")).length;
+                        console.log(lengthSplit);
+
+                    //    for (increment < lengthSplit );
+                        if (t3.search((filterText.split(" "))[0]) < 0){
+
+                            increment = increment + 1;
+
+                        }
+
+                        if (increment < 1) {
+                        oracles.appendChild(t2);
+                        oracles.appendChild(button);
+                        oracles.appendChild(br());
+                        }
 
                     }
-                    
 
                 };
                // firstTimeBool = 1;
@@ -272,7 +306,24 @@ if (firstTimeBool != 1){
             //console.log(JSON.stringify(C[1])); */
         });
     };
-    return {oracleDoc: oracleDoc, title:title, oracles: oracles, t2: t2, offers: offers, oracle_list_pull: (function() { return oracle_list_pull; }), display_oracles: display_oracles, display_oracle: display_oracle, display_offers: display_offers};
+
+
+    return {oracle_filter: oracle_filter, oracleDoc: oracleDoc, title:title, oracles: oracles, t2: t2, offers: offers, oracle_list_pull: (function() { return oracle_list_pull; }), display_oracles: display_oracles, display_oracle: display_oracle, display_offers: display_offers};
 })();
 
 abcd.oracle_list_pull();
+
+    function filter(){
+        console.log(abcd.oracle_filter.value);
+        filterText = abcd.oracle_filter.value;
+
+        firstTimeBool = 0;
+        
+        request(["oracle_list"], "http://159.89.87.58:8090/", function(Y) {
+        console.log("oracle_list attempt:");
+        console.log(JSON.stringify(Y));
+        var l = Y.slice(1);
+        abcd.display_oracles(l);
+        });
+
+    }
