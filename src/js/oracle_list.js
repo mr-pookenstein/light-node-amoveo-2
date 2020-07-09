@@ -1,3 +1,5 @@
+
+var firstTimeBool;
 var abcd = (function() {
     var div = document.createElement("div");
     document.body.appendChild(div);
@@ -7,33 +9,54 @@ var abcd = (function() {
 //    div.appendChild(title2);
     glossary.link2(div, "accepting_channel_offer", "how to accept a trade");
     var contract_div = document.createElement("div");
-    div.appendChild(contract_div);
+    //div.appendChild(contract_div);
 
     var title1 = document.createElement("h3");
     title1.innerHTML = "Odds";
     div.appendChild(title1);
     var offers = document.createElement("div");
     div.appendChild(offers);
+    
+    var oracleDoc = document.createElement("h8");
+    var t2 = document.createElement("h8");
 
     var title = document.createElement("h3");
     title.innerHTML = "Events";
     div.appendChild(title);
+
+    var oracles = document.createElement("div");
+    div.appendChild(oracles);
+    //oracles.innerHTML = "test";
+
 
     request(["oracle_list"], "http://159.89.87.58:8090/", function(X) {
         console.log("oracle_list attempt:");
         console.log(JSON.stringify(X));
         var l = X.slice(1);
         offers.innerHTML = "";
+        console.log("right before display_oracles(l)");
         display_oracles(l);
     });
 
+//firstTimeBool = 1;
     function display_oracles(l) {
+        console.log("firsttimebool is: ");
+        console.log(firstTimeBool);
+
+if (firstTimeBool != 1){
+                    oracles.innerHTML = "";
+                    firstTimeBool = 1;
+                }
+
+
+        div.appendChild(oracleDoc);
+        //oracleDoc.innerHTML = "testing";
         if (JSON.stringify(l) == "[]") {
             return 0;
         } else {
             var h = l[0];
-            console.log("this is h");
-            console.log(JSON.stringify(h));
+            //console.log("this is h");
+            //console.log(JSON.stringify(h));
             request(["oracle", h[1]], "http://159.89.87.58:8090/", function(Oracle) {
                 //variable_public_get(["oracle", h], function(Oracle) {
                 if(Oracle == "error") {
@@ -45,7 +68,7 @@ var abcd = (function() {
                     //determine if it is bitcoin put or call
                     console.log(oracle_text.search("as reported by Close price as of "));
                     console.log(oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/"));
-                    var t;
+
                     if (( (oracle_text.search("bitcoin price is more than ") == 0) || (oracle_text.search("bitcoin price is less than ") == 0)) && (oracle_text.search("as reported by Close price as of ") >= 33) && (oracle_text.search("as reported by Close price as of ") <= 35) && (oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/") >= 77) && (oracle_text.search(" on https://coinmarketcap.com/currencies/bitcoin/historical-data/") <= 79)) {
                         console.log("oracle text success");
                         console.log();
@@ -80,28 +103,40 @@ var abcd = (function() {
                                 callorput = "put";
                             }
 
-                            t = text("Bitcoin ".concat(callorput)+ " option | Strike: $"+ coinPrice+" | Maturity: Midnight "+dateValue+" GMT | ");
+                            t2 = text("Bitcoin ".concat(callorput)+ " option | Strike: $"+ coinPrice+" | Maturity: Midnight "+dateValue+" GMT | ");
                             }
                             }
                             
-                    }else{t = text(atob(Oracle[1][4]));
+                    }else{t2 = text(atob(Oracle[1][4]));
                     }
                         
 
                     
 
                     console.log("this is t");
-                    console.log(t);
-                    console.log(t[0]);
+                    console.log(t2);
+                    console.log(t2[0]);
                     var button = button_maker2("see odds", function() { return display_oracle(Oracle[1][2], Oracle[1][3]) });
                     //adding some space
+                    console.log("firstTimeBool: " + firstTimeBool);
+                    if (firstTimeBool > 0){
 
-                    div.appendChild(t);
-                    div.appendChild(button);
-                                        div.appendChild(br());
+                    oracles.appendChild(t2);
+                    oracles.appendChild(button);
+                    oracles.appendChild(br());
+
+                    }else{
+
+
+                    oracles.appendChild(t2);
+                    oracles.appendChild(button);
+                    oracles.appendChild(br());
+
+                    }
                     
 
                 };
+               // firstTimeBool = 1;
                 display_oracles(l.slice(1));
             });
         };
@@ -236,5 +271,7 @@ var abcd = (function() {
             //console.log(JSON.stringify(C[1])); */
         });
     };
-
+    return {oracleDoc: oracleDoc, title:title, oracles: oracles, t2: t2, offers: offers, oracle_list_pull: (function() { return oracle_list_pull; }), display_oracles: display_oracles, display_oracle: display_oracle, display_offers: display_offers};
 })();
+
+abcd.oracle_list_pull();

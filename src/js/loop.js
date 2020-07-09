@@ -9,7 +9,17 @@ function runtheloop(){
 console.log("refreshing blocks");
 headers_object.more_headers();
 console.log("refreshing oracle list");
-//abcd.request_oracles_4loop();
+   //     abcd.oracles.innerHTML = "";
+
+request(["oracle_list"], "http://159.89.87.58:8090/", function(Y) {
+        console.log("oracle_list attempt:");
+        console.log(JSON.stringify(Y));
+        var l = Y.slice(1);
+        abcd.display_oracles(l);
+    });
+firstTimeBool = 0;
+
+
 console.log("seeing if we can update balance");
 console.log(keys.pub());
 console.log("privkey");
