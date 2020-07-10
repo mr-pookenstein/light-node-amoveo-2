@@ -1,6 +1,8 @@
 
 var firstTimeBool;
 var filterText;
+var bigL;
+var firstTimeBool2;
 
 var abcd = (function() {
     var div = document.createElement("div");
@@ -12,7 +14,9 @@ var abcd = (function() {
     glossary.link2(div, "accepting_channel_offer", "how to accept a trade");
     var contract_div = document.createElement("div");
     //div.appendChild(contract_div);
-
+    var title0 = document.createElement("h3");
+    title0.innerHTML = "My positions";
+    div.appendChild(title0);
     var title1 = document.createElement("h3");
     title1.innerHTML = "Odds";
     div.appendChild(title1);
@@ -28,19 +32,7 @@ var abcd = (function() {
     var title = document.createElement("h3");
     title.innerHTML = "Events";
     div.appendChild(title);
-    var oracle_filter = document.createElement("INPUT");
-    div.appendChild(text("Filter: "));
-    div.appendChild(oracle_filter);
-    div.appendChild(text(" "));
-    div.appendChild(filterbutton);
-    div.appendChild(text(" "));
-    div.appendChild(resetfilterbutton);
-
-
-    div.appendChild(br());
-    div.appendChild(br());
-
-    div.appendChild(text("Presets: "));
+    div.appendChild(text("Preset filter: "));
     var optionPresetButton1 = button_maker2("Coin Put Options", function() { return PresetFilter("option put Strike Maturity Midnight GMT")});
     var optionPresetButton2 = button_maker2("Coin Call Options", function() { return PresetFilter("option call Strike Maturity Midnight GMT")});
     
@@ -53,6 +45,20 @@ var abcd = (function() {
 
     div.appendChild(br());
     div.appendChild(br());
+
+    var oracle_filter = document.createElement("INPUT");
+    div.appendChild(text("Custom filter: "));
+    div.appendChild(oracle_filter);
+    div.appendChild(text(" "));
+    div.appendChild(filterbutton);
+    div.appendChild(text(" "));
+    div.appendChild(resetfilterbutton);
+
+
+    div.appendChild(br());
+    div.appendChild(br());
+
+
 
     var oracles = document.createElement("div");
     div.appendChild(oracles);
@@ -208,10 +214,27 @@ if (firstTimeBool != 1){
         request(["get_offers", l], "http://159.89.87.58:8090/", function(l2) {
             console.log(JSON.stringify(l2));
             offers.innerHTML = "";
+            bigL = l2.slice(1);
+            console.log("in display oracle");
+            console.log("L is display oracle" + bigL);
+            firstTimeBool2 = 0;
             return display_offers(l2.slice(1));
         });
     };
     function display_offers(l) {
+
+if (firstTimeBool2 != 1){
+                    offers.innerHTML = "";
+                    firstTimeBool2 = 1;
+                        console.log("making offers innerhtml blank");
+                }
+
+
+        console.log(l);
+     //   bigL = l;
+        console.log("L is "+ bigL);
+        console.log("displaying offers");
+
         if (JSON.stringify(l) == "[]") {
             return 0;
         } else {

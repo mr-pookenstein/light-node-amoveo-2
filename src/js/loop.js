@@ -17,7 +17,10 @@ request(["oracle_list"], "http://159.89.87.58:8090/", function(Y) {
         var l = Y.slice(1);
         abcd.display_oracles(l);
     });
+
 firstTimeBool = 0;
+
+
 
 
 console.log("seeing if we can update balance");
