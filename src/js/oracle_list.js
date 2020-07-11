@@ -309,11 +309,11 @@ if (firstTimeBool != 1){
                 }
 
                 positionDiv.appendChild(text("Risk: "));
-                positionDiv.appendChild(text(myStake / 100000000));
+                positionDiv.appendChild(text(Number(myStake / 100000000).toPrecision(3)));
                 positionDiv.appendChild(br());
 
                 positionDiv.appendChild(text("Reward: "));
-                positionDiv.appendChild(text((Number(theirStake))/100000000));
+                positionDiv.appendChild(text(Number(((Number(theirStake))/100000000).toPrecision(3))));
 
                 positionDiv.appendChild(br());
 
@@ -393,12 +393,22 @@ if (firstTimeBool != 1){
             }
         }
 //        var text = "bet type: ".concat(type).concat("; price = ").concat(price.toFixed(5)).concat(d1message).concat((1/price).toFixed(5)).concat(d2message).concat(" you win if ").concat(direction).concat("; they pay = ").concat(s2c(h[7])).concat("; you pay = ").concat(s2c(h[8])).concat("; expires: ").concat(h[5]);
-        
-        var text = ("Risk: ").concat(s2c(h[8])).concat("<br />")+" Reward: ".concat(s2c(h[7]));
+  
+
+
+          offers.style.display = "inline";      
+        var text = ("| Risk: ").concat(Number(s2c(h[8]).toPrecision(3))).concat(" ")+"| Reward: ".concat(Number(s2c(h[7]).toPrecision(3))).concat(" | ");
 
         t.innerHTML = text;
+        
+
+            t.style.display = "inline";
+
+
         offers.appendChild(t);
-        var button = button_maker2("Go (be careful)", function() { display_contract(h, type) });
+        var button = button_maker2("Accept trade", function() { display_contract(h, type) });
+        button.style.display = "inline";
+   //     offers.appendChild(text(" "));
         offers.appendChild(button);
         offers.appendChild(br());
         display_offers(l.slice(1));

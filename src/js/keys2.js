@@ -59,7 +59,7 @@ Lab.innerHTML = "adsfds";
 function setDefaultKey(){
     console.log("setting default key");
     pushtolocal();
-    console.log("here is the private key:");
+   // console.log("here is the private key:");
     console.log();
 
 }
@@ -259,12 +259,12 @@ function copy_address(){
                     C = 0;
 
                 var S = ("Balance: ").concat(
-                    (C).toString()).concat(
+                    Number(C.toPrecision(4)).toString()).concat(
                         " VEO");
                 if (!(C == U)) {
                     S = S.concat(
                         ", unconfirmed: ").concat(
-                            (U-C).toString()).concat(
+                            (Number((U-C).toPrecision(4))).toString()).concat(
                                 " VEO");
                 };
                 bal_div.innerHTML = S;
@@ -275,12 +275,12 @@ function copy_address(){
 
                 //set_balance(C);
                 var S = ("Balance: ").concat(
-                    (C).toString()).concat(
+                    Number(C.toPrecision(4)).toString().toString()).concat(
                         " VEO");
                 if (!(C == U)) {
                     S = S.concat(
                         ", unconfirmed: ").concat(
-                            (U-C).toString()).concat(
+                            (Number((U-C).toPrecision(4))).toString()).concat(
                                 " VEO");
                 };
                 bal_div.innerHTML = S;}
@@ -361,8 +361,8 @@ keys.load_keys2();
 }
 
 function pushtolocal() {
-    console.log("pushtolocal check");
-    console.log((keys.keys_internal().getPrivate("hex")));
+   // console.log("pushtolocal check");
+   // console.log((keys.keys_internal().getPrivate("hex")));
     window.localStorage.setItem("privKey", keys.keys_internal().getPrivate("hex"));
 }
 
