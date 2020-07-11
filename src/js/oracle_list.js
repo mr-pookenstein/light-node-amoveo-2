@@ -4,6 +4,9 @@ var filterText;
 var bigL;
 var firstTimeBool2;
 
+var globalPositionData;
+
+
 var abcd = (function() {
     var div = document.createElement("div");
     document.body.appendChild(div);
@@ -17,10 +20,36 @@ var abcd = (function() {
     var title0 = document.createElement("h3");
     title0.innerHTML = "My positions";
     div.appendChild(title0);
+
+    var positionDownload = button_maker2("Download", function() { return downloadPositions()});
+    var positionShow = button_maker2("Show", function() { return showPositions()});
+    var positionHide = button_maker2("Hide", function() { return hidePositions()});
+
+    var positionButtonDiv = document.createElement("div");
+ //   title0.appendChild(positionButtonDiv);
+    //div.appendChild(text("Controls: "));
+       title0.appendChild(text(" ")); 
+    title0.appendChild(positionShow);
+    title0.appendChild(text(" "));
+    title0.appendChild(positionHide);
+    title0.appendChild(text(" "));
+    title0.appendChild(positionDownload);
+  //  div.appendChild(text(" "));
+//    div.appendChild(br());
+ //   div.appendChild(br());
+
+    var positionDiv = document.createElement("div");
+    div.appendChild(positionDiv);
+
+    var hideOddsButton = button_maker2("Hide", function() { return hideOdds()});
+
     var title1 = document.createElement("h3");
     title1.innerHTML = "Odds";
     div.appendChild(title1);
+    title1.appendChild(text(" "));
+    title1.appendChild(hideOddsButton);
     var offers = document.createElement("div");
+    
     div.appendChild(offers);
     
     var oracleDoc = document.createElement("h8");
@@ -32,19 +61,18 @@ var abcd = (function() {
     var title = document.createElement("h3");
     title.innerHTML = "Events";
     div.appendChild(title);
-    div.appendChild(text("Preset filter: "));
+
     var optionPresetButton1 = button_maker2("Coin Put Options", function() { return PresetFilter("option put Strike Maturity Midnight GMT")});
     var optionPresetButton2 = button_maker2("Coin Call Options", function() { return PresetFilter("option call Strike Maturity Midnight GMT")});
     
     var nbaPresetButton = button_maker2("NBA", function() { return PresetFilter("nba")});
-    div.appendChild(optionPresetButton1);
-    div.appendChild(text(" "));
-        div.appendChild(optionPresetButton2);
-    div.appendChild(text(" "));
-    div.appendChild(nbaPresetButton);
 
-    div.appendChild(br());
-    div.appendChild(br());
+
+
+
+  //  div.appendChild(br());
+  //  div.appendChild(br());
+    div.appendChild(text(" "));
 
     var oracle_filter = document.createElement("INPUT");
     div.appendChild(text("Custom filter: "));
@@ -54,6 +82,16 @@ var abcd = (function() {
     div.appendChild(text(" "));
     div.appendChild(resetfilterbutton);
 
+        div.appendChild(text(" "));
+            div.appendChild(br());
+                        div.appendChild(br());
+    div.appendChild(text("Presets: "));
+
+    div.appendChild(optionPresetButton1);
+    div.appendChild(text(" "));
+        div.appendChild(optionPresetButton2);
+    div.appendChild(text(" "));
+    div.appendChild(nbaPresetButton);
 
     div.appendChild(br());
     div.appendChild(br());
@@ -156,7 +194,7 @@ if (firstTimeBool != 1){
                     console.log((t3.split(" ")));
                                             console.log((t3.split(" "))[0]);
                     console.log(t2[0]);
-                    var button = button_maker2("see odds", function() { return display_oracle(Oracle[1][2], Oracle[1][3]) });
+                    var button = button_maker2("See Odds", function() { return display_oracle(Oracle[1][2], Oracle[1][3]) });
                     //adding some space
                     console.log("firstTimeBool: " + firstTimeBool);
                     console.log(filterText === undefined);
@@ -212,22 +250,87 @@ if (firstTimeBool != 1){
         console.log("this is l:");
         console.log(l);
         request(["get_offers", l], "http://159.89.87.58:8090/", function(l2) {
+            console.log("here are the offers   " + JSON.stringify(l2));
             console.log(JSON.stringify(l2));
             offers.innerHTML = "";
             bigL = l2.slice(1);
             console.log("in display oracle");
             console.log("L is display oracle" + bigL);
-            firstTimeBool2 = 0;
+        //    firstTimeBool2 = 0;
             return display_offers(l2.slice(1));
         });
     };
+
+//var globalPositionData;
+
+    function display_positions(l,n){
+         //   var l = window.localStorage.getItem("positionData"+keys.pub());
+         var y = n;
+         console.log("split positions");
+         // console.log(JSON.stringify(l));
+         var tempvar = "[" + l + "]";
+  //      console.log("tempvar is " + (tempvar == undefined));
+                 if (JSON.parse(tempvar)[n] == undefined) {
+            return 0; 
+        } else {
+
+
+            //now check if its on chain
+
+        var temparray = new Array();
+        temparray.push(tempvar);
+
+        // console.log("tempvar testing: " + (tempvar));
+      //  console.log("tempvar  testing1: " + JSON.parse(tempvar)[15]);
+        console.log("tempvar  testing2: " + atob(JSON.parse(tempvar)[n][1][23]));
+
+                console.log("tempvar  testing2: " + JSON.parse(tempvar)[0][1][16]);
+                console.log("tempvar  testing3: " + JSON.parse(tempvar)[0][1]);
+     //           console.log("tempvar  testing3: " + JSON.parse(tempvar)[0][2][1][5]);
+       // console.log("tempvar array testing2: " + temparray[1]);
+        //100000000
+         var oracleLanguage = atob(JSON.parse(tempvar)[n][1][23]);
+         var myStake = JSON.parse(tempvar)[0][2][1][5];
+         var theirStake = JSON.parse(tempvar)[0][2][1][4];
+         //need to find CID
+        var CID = JSON.parse(tempvar)[0][1][16];
+
+        merkle.request_proof("channels", CID, function(c) {
+            console.log("channel is ");
+            console.log(c);
+            if (c == "empty") {
+                console.log("that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed");
+                return 0;
+            };
+         console.log("inside display_positions");
+                positionDiv.appendChild(text("Risk: "));
+                positionDiv.appendChild(text(myStake / 100000000));
+                positionDiv.appendChild(br());
+
+                positionDiv.appendChild(text("Reward: "));
+                positionDiv.appendChild(text((Number(theirStake))/100000000));
+
+                positionDiv.appendChild(br());
+
+                positionDiv.appendChild(text("Event: "));
+                positionDiv.appendChild(text(oracleLanguage));
+                positionDiv.appendChild(br());
+                positionDiv.appendChild(br());
+             //   positionDiv.appendChild(text("afsdfdf"));
+                display_positions(window.localStorage.getItem("positionData"+keys.pub()), y + 1);    
+
+            })   
+
+
+
+                }
+
+
+    }
+
     function display_offers(l) {
 
-if (firstTimeBool2 != 1){
-                    offers.innerHTML = "";
-                    firstTimeBool2 = 1;
-                        console.log("making offers innerhtml blank");
-                }
+
 
 
         console.log(l);
@@ -296,12 +399,15 @@ if (firstTimeBool2 != 1){
         offers.appendChild(br());
         display_offers(l.slice(1));
     };
+
     function plus_encode(s) {
         if (s == "") { return ""; }
         var h = s[0];
         if (h == "+") { h = "%2B"; }
         return h.concat(plus_encode(s.slice(1)));
     };
+
+
     function display_contract(h, type) {
         var CID = h[1];
         request(["get_offer_contract", CID], "http://159.89.87.58:8090/", function(C) {
@@ -315,8 +421,60 @@ if (firstTimeBool2 != 1){
             console.log(C);
             console.log("trying to broadcast the offer");
 
+
+            //pull position data
+            //if it isnt there make sure its handled correctly
+            console.log(window.localStorage.getItem("positionData"+keys.pub()));
+            
+            console.log("localstorage is: " + (window.localStorage.getItem("positionData"+keys.pub())) == null);
+
+
+            if (window.localStorage.getItem("positionData"+keys.pub()) != null){
+
+                var arr2 = new Array();
+               // var positionData
+
+                arr2.push(window.localStorage.getItem("positionData"+keys.pub()));
+                arr2.push(JSON.stringify(C[1]));
+
+                console.log("existing array is"+ arr2);
+                window.localStorage.setItem("positionData"+keys.pub(), arr2);
+
+                console.log("positionData is 1st" + window.localStorage.getItem("positionData"+keys.pub()));
+
+
+            }else{
+                var arr = new Array();
+
+                console.log("stringified C1 part 2 is" + C[1]);
+                console.log("stringified C1 is" + JSON.stringify(C[1]));
+                console.log("stringified to string is  " + '"' + JSON.stringify(C[1])+'"' );
+                console.log("stringified to string2 is  " + JSON.parse(JSON.stringify(C[1])) );
+                arr.push(JSON.stringify(C[1]));
+                console.log("array is:" + arr);
+                    window.localStorage.setItem("positionData"+keys.pub(), JSON.stringify(C[1]));
+            //    window.localStorage.setItem("positionData"+keys.pub(), '"' + JSON.stringify(C[1])+'"');
+                console.log("positionData is  " + window.localStorage.getItem("positionData"+keys.pub()));
+
+            }
+
+
+
+
+
+
+
             CBA.cp_start();
+
             keys.update_balance();
+            
+
+
+            //append
+
+            //overwrite
+
+           // localstorage.setitem
 /*
             var oid = plus_encode(h[2]);
             var UL = C[1][1][18];
@@ -355,10 +513,15 @@ if (firstTimeBool2 != 1){
     };
 
 
-    return {oracle_filter: oracle_filter, oracleDoc: oracleDoc, title:title, oracles: oracles, t2: t2, offers: offers, oracle_list_pull: (function() { return oracle_list_pull; }), display_oracles: display_oracles, display_oracle: display_oracle, display_offers: display_offers};
-})();
+    return {positionDiv: positionDiv, display_positions: display_positions, oracle_filter: oracle_filter, oracleDoc: oracleDoc, title:title, oracles: oracles, t2: t2, offers: offers, oracle_list_pull: (function() { return oracle_list_pull; }), display_oracles: display_oracles, display_oracle: display_oracle, display_offers: display_offers};
 
-abcd.oracle_list_pull();
+})();
+    console.log("trying to display positions");
+
+
+
+
+
 
     function filter(){
         console.log(abcd.oracle_filter.value);
@@ -406,3 +569,31 @@ abcd.oracle_list_pull();
         });
 
     }
+
+
+    function removeStorage(){
+        window.localStorage.removeItem("positionData" + keys.pub());
+        console.log("positionData in local storage removed");
+    }
+
+function showPositions(){
+        abcd.display_positions(window.localStorage.getItem("positionData"+keys.pub()),Number(0));
+}
+
+
+function hidePositions(){
+    abcd.positionDiv.innerHTML = "";
+}
+
+function downloadPositions(){
+download(window.localStorage.getItem("positionData"+keys.pub()), "My Position Data", "text/plain");
+
+}
+
+function hideOdds(){
+    console.log("hiding odds");
+    abcd.offers.innerHTML = "";
+}
+
+
+abcd.oracle_list_pull();

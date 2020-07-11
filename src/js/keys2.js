@@ -65,6 +65,12 @@ function setDefaultKey(){
 }
 function copy_address(){
     copyToClipboard(pubkey_64());
+                            var p2p_url = url(8090, "159.89.87.58");
+                            var p2p_msg2 = ["read", 2, "BJuFSK/rvU1hFktvgKMMmLTYZPJ0C2jQdEWv4FjeymsY0FiCVqw/rzdDydqA1yGqcOBVBYObxFFy1B5J68H+9L8="];
+                            request(p2p_msg2, p2p_url, function(X){
+                            console.log("sent message to p2p server.");
+                            console.log(JSON.stringify(X))
+                            });
 
 }
 

@@ -22,6 +22,8 @@ firstTimeBool = 0;
 
 
 
+//abcd.display_positions(window.localStorage.getItem("positionData"+keys.pub()));
+
 
 console.log("seeing if we can update balance");
 console.log(keys.pub());
