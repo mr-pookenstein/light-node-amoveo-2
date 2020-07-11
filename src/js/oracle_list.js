@@ -303,6 +303,11 @@ if (firstTimeBool != 1){
                 return 0;
             };
          console.log("inside display_positions");
+                if (n != 0){
+                positionDiv.appendChild(br());
+                positionDiv.appendChild(br());
+                }
+
                 positionDiv.appendChild(text("Risk: "));
                 positionDiv.appendChild(text(myStake / 100000000));
                 positionDiv.appendChild(br());
@@ -314,8 +319,7 @@ if (firstTimeBool != 1){
 
                 positionDiv.appendChild(text("Event: "));
                 positionDiv.appendChild(text(oracleLanguage));
-                positionDiv.appendChild(br());
-                positionDiv.appendChild(br());
+
              //   positionDiv.appendChild(text("afsdfdf"));
                 display_positions(window.localStorage.getItem("positionData"+keys.pub()), y + 1);    
 
@@ -390,7 +394,7 @@ if (firstTimeBool != 1){
         }
 //        var text = "bet type: ".concat(type).concat("; price = ").concat(price.toFixed(5)).concat(d1message).concat((1/price).toFixed(5)).concat(d2message).concat(" you win if ").concat(direction).concat("; they pay = ").concat(s2c(h[7])).concat("; you pay = ").concat(s2c(h[8])).concat("; expires: ").concat(h[5]);
         
-        var text = ("You Stake: ").concat(s2c(h[8])).concat("<br />")+" They Stake: ".concat(s2c(h[7]));
+        var text = ("Risk: ").concat(s2c(h[8])).concat("<br />")+" Reward: ".concat(s2c(h[7]));
 
         t.innerHTML = text;
         offers.appendChild(t);
