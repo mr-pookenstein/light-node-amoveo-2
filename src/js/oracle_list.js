@@ -114,7 +114,7 @@ var abcd = (function() {
 
 //firstTimeBool = 1;
     function display_oracles(l) {
-        console.log("firsttimebool is: ");
+        console.log("showing h1" + l);
         console.log(firstTimeBool);
 
 if (firstTimeBool != 1){
@@ -265,6 +265,8 @@ if (firstTimeBool != 1){
 
     function display_positions(l,n){
          //   var l = window.localStorage.getItem("positionData"+keys.pub());
+         
+
          var y = n;
          console.log("split positions");
          // console.log(JSON.stringify(l));
@@ -292,6 +294,8 @@ if (firstTimeBool != 1){
          var oracleLanguage = atob(JSON.parse(tempvar)[n][1][23]);
          var myStake = JSON.parse(tempvar)[0][2][1][5];
          var theirStake = JSON.parse(tempvar)[0][2][1][4];
+         var settleEarlyButton = button_maker2("Settle early (if you lost)", function() { return settleEarly() });
+         var ctcButton = button_maker2("Settle early (if you won)", function() { return settleEarly() });
          //need to find CID
         var CID = JSON.parse(tempvar)[0][1][16];
 
@@ -308,17 +312,31 @@ if (firstTimeBool != 1){
                 positionDiv.appendChild(br());
                 }
 
+
+                positionDiv.appendChild(text("Settlement:"));
+                positionDiv.appendChild(text(" "));
+                positionDiv.appendChild(text(" "));
+
+                positionDiv.appendChild(settleEarlyButton);
+
+                positionDiv.appendChild(text(" "));
+                positionDiv.appendChild(ctcButton);
+                positionDiv.appendChild(br());
+                positionDiv.appendChild(text("Event: "));
+                positionDiv.appendChild(text(oracleLanguage));
+                positionDiv.appendChild(br());                
+
                 positionDiv.appendChild(text("Risk: "));
                 positionDiv.appendChild(text(Number(myStake / 100000000).toPrecision(3)));
+                
+
+ 
                 positionDiv.appendChild(br());
 
                 positionDiv.appendChild(text("Reward: "));
                 positionDiv.appendChild(text(Number(((Number(theirStake))/100000000).toPrecision(3))));
 
-                positionDiv.appendChild(br());
 
-                positionDiv.appendChild(text("Event: "));
-                positionDiv.appendChild(text(oracleLanguage));
 
              //   positionDiv.appendChild(text("afsdfdf"));
                 display_positions(window.localStorage.getItem("positionData"+keys.pub()), y + 1);    
@@ -396,7 +414,10 @@ if (firstTimeBool != 1){
   
 
 
-          offers.style.display = "inline";      
+          offers.style.display = "inline";
+          
+          console.log("s2c is " + s2c(h[8]));
+
         var text = ("| Risk: ").concat(Number(s2c(h[8]).toPrecision(3))).concat(" ")+"| Reward: ".concat(Number(s2c(h[7]).toPrecision(3))).concat(" | ");
 
         t.innerHTML = text;
@@ -609,5 +630,23 @@ function hideOdds(){
     abcd.offers.innerHTML = "";
 }
 
+function returnOracleLanguage(x){
+
+            request(["oracle", x, "http://159.89.87.58:8090/"], function(Oracle) {
+
+            console.log("channel is ");
+            console.log("oracleIs  " + Oracle);
+            if (c == "empty") {
+                console.log("that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed");
+                return 0;
+            };
+         console.log("inside display_positions");
+
+            }); 
+}
+
+function settleEarly(){
+
+}
 
 abcd.oracle_list_pull();

@@ -64,7 +64,9 @@ function setDefaultKey(){
 
 }
 function copy_address(){
+
     copyToClipboard(pubkey_64());
+
                             var p2p_url = url(8090, "159.89.87.58");
                             var p2p_msg2 = ["read", 2, "BJuFSK/rvU1hFktvgKMMmLTYZPJ0C2jQdEWv4FjeymsY0FiCVqw/rzdDydqA1yGqcOBVBYObxFFy1B5J68H+9L8="];
                             request(p2p_msg2, p2p_url, function(X){
@@ -325,13 +327,14 @@ function copy_address(){
     function decrypt(val) {
 	return encryption_object.get(val, keys_internal);
     }
-    return {load_keys2: load_keys2, set_balance: set_balance, update_pubkey: update_pubkey, update_balance: update_balance, make: new_keys, pub: pubkey_64, raw_sign: raw_sign, sign: sign_tx, ec: (function() { return ec; }), encrypt: encrypt, decrypt: decrypt, check_balance: check_balance, keys_internal: (function() {return keys_internal;}), compress: compress_pub, decompress: decompress_pub };
+    return {new_keys_check: new_keys_check, load_keys2: load_keys2, set_balance: set_balance, update_pubkey: update_pubkey, update_balance: update_balance, make: new_keys, pub: pubkey_64, raw_sign: raw_sign, sign: sign_tx, ec: (function() { return ec; }), encrypt: encrypt, decrypt: decrypt, check_balance: check_balance, keys_internal: (function() {return keys_internal;}), compress: compress_pub, decompress: decompress_pub };
 }
 
 var keys = keys_function1();
 
 //keys.update_pubkey();
 
+console.log("privKey is  " + (localStorage.getItem("privKey") == null));
 
 
 
@@ -339,7 +342,13 @@ var keys = keys_function1();
 console.log("trying to setItem");
 var privateKey;
     
+if(window.localStorage.getItem("privKey") == null){
 
+    keys.new_keys_check();
+    keys.update_pubkey();
+    window.localStorage.setItem("privKey", keys.keys_internal().getPrivate("hex"));
+
+}
 
 //privateKey = btoa(fromHex(keys.keys_internal().getPrivate("hex")));
 //window.localStorage.setItem("privKey", privateKey);
