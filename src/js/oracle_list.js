@@ -292,8 +292,8 @@ if (firstTimeBool != 1){
        // console.log("tempvar array testing2: " + temparray[1]);
         //100000000
          var oracleLanguage = atob(JSON.parse(tempvar)[n][1][23]);
-         var myStake = JSON.parse(tempvar)[0][2][1][5];
-         var theirStake = JSON.parse(tempvar)[0][2][1][4];
+         var myStake = JSON.parse(tempvar)[n][2][1][5];
+         var theirStake = JSON.parse(tempvar)[n][2][1][4];
          var settleEarlyButton = button_maker2("Settle early (if you lost)", function() { return settleEarly() });
          var ctcButton = button_maker2("Settle early (if you won)", function() { return settleEarly() });
          //need to find CID
@@ -535,7 +535,6 @@ if (firstTimeBool != 1){
             var our_amount = F(C[1][2][1][5]);
             var their_amount = F(C[1][2][1][4]);
             var oracle_height = C[1][3][2];
-
             console.log("c1 one: ");
             console.log(C[1]);
             console.log("c1 two: ");
