@@ -1,3 +1,6 @@
+var globalVerif;
+
+
 function merkle_proofs_main() {
     function verify_callback(tree, key, callback) {
 	var top_hash = hash(headers_object.serialize(headers_object.top()));
@@ -10,6 +13,19 @@ function merkle_proofs_main() {
 	    
 	});
     }
+
+    function verify_callback2(tree, key, callback) {
+    var top_hash = hash(headers_object.serialize(headers_object.top()));
+        console.log("verify callback key is ");
+        console.log(JSON.stringify(key));
+    variable_public_get(["proof", btoa(tree), key, btoa(array_to_string(top_hash))], function(proof){
+            if ((proof[3] == "empty")||(proof[3]==0)) { return callback("empty"); };
+        var val = verify_merkle2(key, proof);
+        return callback(val);
+        
+    });
+    }
+
     function hash_member(hash, members) {
         for (var i = 0; i < 8; i++) {
             var h2 = members.slice(32*i, 32*(i+1));
@@ -109,6 +125,54 @@ function merkle_proofs_main() {
             }
 	}
     }
+
+    function verify_merkle2(trie_key, x) {
+    //x is {return tree_roots, tree_root, value, proof_chain}
+    var tree_roots = string_to_array(atob(x[1]));
+    var header_trees_hash = string_to_array(atob(headers_object.top()[3]));
+    var hash_tree_roots = hash(tree_roots);
+    var check = check_equal(header_trees_hash, hash_tree_roots);
+    if (!(check)) {
+            console.log("the hash of tree roots doesn't match the hash in the header.");
+    } else {
+            var tree_root = string_to_array(atob(x[2]));
+            var check2 = hash_member(tree_root, tree_roots);
+            if (!(check2)) {
+        console.log("that tree root is not one of the valid tree roots.");
+            } else {
+        var chain = x[4].slice(1);
+        chain.reverse();
+        var h = link_hash(chain[0]);
+        var check3 = check_equal(h, tree_root);
+        var check4 = chain_links(chain);
+        if (!(check3)) {
+                    console.log("the proof chain doesn't link to the tree root");
+        } else if (!(check4)){
+                    console.log("the proof chain has a broken link");
+        } else {
+                    var last = chain[chain.length - 1];
+                    var value = x[3];
+                    console.log(JSON.stringify([value, trie_key]));
+                    var lh = leaf_hash(value, trie_key);
+                    var check5 = chain_links_array_member(last, lh);
+                    if (check5) {
+            return value;
+            //we should learn to deal with proofs of empty data.
+                    } else {
+            console.log("the value doesn't match the proof");
+            console.log(JSON.stringify(x));
+            console.log(trie_key);
+            globalVerif = 0;
+            console.log("globalVerif inside verify_merkle2: "+ globalVerif );
+          //  throw("bad");
+                    }
+        }
+            }
+    }
+    }
+
+   
+
     function serialize_key(v, trie_key) {
 	var t = v[0];
 	if ( t == "gov" ) {
@@ -256,7 +320,8 @@ function merkle_proofs_main() {
 	    console.log(fun_limit);
 	});
     }
-    return {request_proof: verify_callback,
+    return {request_proof2: verify_callback2,
+        request_proof: verify_callback,
 	    verify: verify_merkle,
 	    serialize: serialize_tree_element,
 	    serialize_key: serialize_key,

@@ -263,11 +263,15 @@ if (firstTimeBool != 1){
 
 //var globalPositionData;
 
+
     function display_positions(l,n){
          //   var l = window.localStorage.getItem("positionData"+keys.pub());
          
+        console.log("firstn + "+ n);
 
          var y = n;
+
+
          console.log("split positions");
          // console.log(JSON.stringify(l));
          var tempvar = "[" + l + "]";
@@ -297,20 +301,34 @@ if (firstTimeBool != 1){
          var settleEarlyButton = button_maker2("Settle early (if you lost)", function() { return settleEarly() });
          var ctcButton = button_maker2("Settle early (if you won)", function() { return settleEarly() });
          //need to find CID
-        var CID = JSON.parse(tempvar)[0][1][16];
+        var CID = JSON.parse(tempvar)[n][1][16];
 
-        merkle.request_proof("channels", CID, function(c) {
+        merkle.request_proof2("channels", CID, function(c) {
             console.log("channel is ");
             console.log(c);
-            if (c == "empty") {
+                       console.log("globalVerif inside request_proof2: "+ globalVerif );
+            if ((c == "empty") || (globalVerif == 0)) {
                 console.log("that channel does not exist. Maybe you haven't synced with the network, or maybe it is already closed, or maybe it never existed");
+                globalVerif = 1;
+              //  display_positions(window.localStorage.getItem("positionData"+keys.pub()), y + 1);
+                console.log("n testing is 1: " + internalNonce);
+                
+
+               // internalNonce = 0;
+
+                console.log("n testing is 2: " + internalNonce);
                 return 0;
             };
          console.log("inside display_positions");
-                if (n != 0){
+
+         //basically if ur the first one to do it, dont do it
+
+                if (internalNonce != 0){
                 positionDiv.appendChild(br());
                 positionDiv.appendChild(br());
                 }
+
+        //        positionDiv.appendChild(br());
 
 
                 positionDiv.appendChild(text("Settlement:"));
@@ -335,15 +353,19 @@ if (firstTimeBool != 1){
 
                 positionDiv.appendChild(text("Reward: "));
                 positionDiv.appendChild(text(Number(((Number(theirStake))/100000000).toPrecision(3))));
+                
+                internalNonce = internalNonce + 1;
 
+
+         //       positionDiv.appendChild(br());
 
 
              //   positionDiv.appendChild(text("afsdfdf"));
-                display_positions(window.localStorage.getItem("positionData"+keys.pub()), y + 1);    
+  
 
             })   
-
-
+                            display_positions(window.localStorage.getItem("positionData"+keys.pub()), y + 1);
+  
 
                 }
 
@@ -611,7 +633,10 @@ if (firstTimeBool != 1){
     }
 
 function showPositions(){
+
+        internalNonce = 0;
         abcd.display_positions(window.localStorage.getItem("positionData"+keys.pub()),Number(0));
+
 }
 
 
@@ -649,3 +674,8 @@ function settleEarly(){
 }
 
 abcd.oracle_list_pull();
+
+
+var internalNonce;
+
+//internalNonce = 0;
