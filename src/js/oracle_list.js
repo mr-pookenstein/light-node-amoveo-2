@@ -395,14 +395,15 @@ if (firstTimeBool != 1){
 
 
 //next find where the CID is stored
+    console.log("tempvar2 is " + JSON.parse(tempvar2));
 
 if (tempvar2 != "[[-6]]"){
             let i = 1;
             do {
               //  if (JSON.parse(tempvar)[n][1][16] == tempvar){
                 console.log("ntext is tempvar: " +JSON.parse(tempvar)[n][1][16])
-             //   console.log("i is : " + i + " while ntext is tempvar2: " + JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4]))
-
+                console.log("i is : " + i + " while ntext is tempvar2: " + JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4]))
+                    console.log("tempvar length" + JSON.parse(tempvar2)[0].length);
 
 
                 if( ('"' + JSON.parse(tempvar)[n][1][16]+ '"') == JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4])) {
@@ -417,9 +418,9 @@ if (tempvar2 != "[[-6]]"){
                 positionDiv.appendChild(text(" "));
 
                 }
-                i=Number(i)+Number(1);
+                i= Number(i) + Number(1);
 
-} while (i < ( Number(JSON.parse(tempvar2).length) + Number(2)) );
+} while (i < ( Number(JSON.parse(tempvar2)[0].length)) );
 
 //}
 }
@@ -866,7 +867,7 @@ function tradeExplorer(){
 //hideCreateABet();
 tradeExplorer();
 
-abcd.oracle_list_pull();
+//abcd.oracle_list_pull();
 
 
 var internalNonce;
