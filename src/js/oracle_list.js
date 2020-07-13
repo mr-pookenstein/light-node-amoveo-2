@@ -503,7 +503,11 @@ if (firstTimeBool != 1){
 
           var implProb = (100*(s2c(h[8]) / (s2c(h[7]) + s2c(h[8])))).toPrecision(3) + "%";
 
-        var text = "| Implied Probability: ".concat(implProb).concat(" | Risk: ").concat(Number(s2c(h[8]).toPrecision(3))).concat(" ")+"| Reward: ".concat(Number(s2c(h[7]).toPrecision(3))).concat(" | ");
+          if (direction == "the result is false"){
+                implProb = (Number(100) -  100*(s2c(h[8]) / (s2c(h[7]) + s2c(h[8]))) ).toPrecision(3) + "%"
+                    }
+
+        var text = "You win if "+direction+ " | Implied Probability: ".concat(implProb).concat(" | Risk: ").concat(Number(s2c(h[8]).toPrecision(3))).concat(" ")+"| Reward: ".concat(Number(s2c(h[7]).toPrecision(3))).concat(" | ");
 
         t.innerHTML = text;
         
