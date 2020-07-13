@@ -69,6 +69,8 @@ var dcba = (function otc_function2() {
     var below = document.createElement("INPUT");
     below.type = 'checkbox';
     below.style="width:15px;height:15px;"
+
+    
 var createNumber;
 
 function showCoinPutFields(){
@@ -100,11 +102,11 @@ function showCoinPutFields(){
 
     underDiv.appendChild(br());
     
-    underDiv.appendChild(aboveOrBelow);
-    aboveOrBelow.appendChild(text("above: "));
-    aboveOrBelow.appendChild(above);
-    aboveOrBelow.appendChild(text(" or below: "));
-    aboveOrBelow.appendChild(below);
+    underDiv.appendChild(text("You win if price ends "));
+    underDiv.appendChild(text("above: "));
+    underDiv.appendChild(above);
+    underDiv.appendChild(text(" or below: "));
+    underDiv.appendChild(below);
 
 
 
