@@ -54,8 +54,8 @@ Lab.innerHTML = "adsfds";
         div.appendChild(set_key_button);
         div.appendChild(download_key_button);
     div.appendChild(file_selector);
-    div.appendChild(br());
-        div.appendChild(br());
+//    div.appendChild(br());
+ //       div.appendChild(br());
 function setDefaultKey(){
     console.log("setting default key");
     pushtolocal();
@@ -260,6 +260,12 @@ function copy_address(){
 
                     C = 0;
 
+                if (((C).toString() == 0) && ((U).toString() == "NaN")) {
+
+                    U = 0;
+                    
+                    }
+
                 var S = ("Balance: ").concat(
                     Number(C.toPrecision(4)).toString()).concat(
                         " VEO");
@@ -274,6 +280,12 @@ function copy_address(){
 
                 } else {
 
+                if (((C).toString() == 0) && ((U).toString() == "NaN")) {
+
+                    C = 0;
+                    U = 0;
+
+                    }
 
                 //set_balance(C);
                 var S = ("Balance: ").concat(
@@ -327,7 +339,7 @@ function copy_address(){
     function decrypt(val) {
 	return encryption_object.get(val, keys_internal);
     }
-    return {new_keys_check: new_keys_check, load_keys2: load_keys2, set_balance: set_balance, update_pubkey: update_pubkey, update_balance: update_balance, make: new_keys, pub: pubkey_64, raw_sign: raw_sign, sign: sign_tx, ec: (function() { return ec; }), encrypt: encrypt, decrypt: decrypt, check_balance: check_balance, keys_internal: (function() {return keys_internal;}), compress: compress_pub, decompress: decompress_pub };
+    return {bal_div: bal_div, new_keys_check: new_keys_check, load_keys2: load_keys2, set_balance: set_balance, update_pubkey: update_pubkey, update_balance: update_balance, make: new_keys, pub: pubkey_64, raw_sign: raw_sign, sign: sign_tx, ec: (function() { return ec; }), encrypt: encrypt, decrypt: decrypt, check_balance: check_balance, keys_internal: (function() {return keys_internal;}), compress: compress_pub, decompress: decompress_pub };
 }
 
 var keys = keys_function1();

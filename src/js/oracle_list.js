@@ -73,28 +73,29 @@ var abcd = (function() {
   //  div.appendChild(br());
   //  div.appendChild(br());
     div.appendChild(text(" "));
-
+    var div2 = document.createElement("div");
+    div.appendChild(div2);
     var oracle_filter = document.createElement("INPUT");
-    div.appendChild(text("Custom filter: "));
-    div.appendChild(oracle_filter);
-    div.appendChild(text(" "));
-    div.appendChild(filterbutton);
-    div.appendChild(text(" "));
-    div.appendChild(resetfilterbutton);
+    div2.appendChild(text("Custom filter: "));
+    div2.appendChild(oracle_filter);
+    div2.appendChild(text(" "));
+    div2.appendChild(filterbutton);
+    div2.appendChild(text(" "));
+    div2.appendChild(resetfilterbutton);
 
-        div.appendChild(text(" "));
-            div.appendChild(br());
-                        div.appendChild(br());
-    div.appendChild(text("Presets: "));
+        div2.appendChild(text(" "));
+            div2.appendChild(br());
+                        div2.appendChild(br());
+    div2.appendChild(text("Presets: "));
 
-    div.appendChild(optionPresetButton1);
-    div.appendChild(text(" "));
-        div.appendChild(optionPresetButton2);
-    div.appendChild(text(" "));
-    div.appendChild(nbaPresetButton);
+    div2.appendChild(optionPresetButton1);
+    div2.appendChild(text(" "));
+        div2.appendChild(optionPresetButton2);
+    div2.appendChild(text(" "));
+    div2.appendChild(nbaPresetButton);
 
-    div.appendChild(br());
-    div.appendChild(br());
+    div2.appendChild(br());
+    div2.appendChild(br());
 
 
 
@@ -182,8 +183,41 @@ if (firstTimeBool != 1){
                             }
                             }
                             
-                    }else{t2 = text(atob(Oracle[1][4]));
-                          t3 = atob(Oracle[1][4]);                          
+                    }else{
+
+                 //       console.log("splitting text " + oracle_text.split(";"));
+          //       console.log("splitting text0 " + oracle_text.split(";")[3].substring(21, oracle_text.split(";")[3].length));
+         //        console.log("splitting text1" + (oracle_text.split(";")[3].substring(21, 0) == " Z (in MM/DD/YYYY) = " ));
+                      //      console.log("splitting text " + (oracle_text.split(";")[1].substring(5, oracle_text.split(";")[1].length) ));
+                        if ((oracle_text.split(";")[3].substring(21, 0) == " Z (in MM/DD/YYYY) = " ) && (oracle_text.split(";")[2].substring(5, 0) == " Y = ") && (oracle_text.split(";")[1].substring(5, 0) == " X = ") && (oracle_text.split(";")[oracle_text.split(";").length - 1] == " return (price of Y is more than X as of Z as reported by W)") && (oracle_text.split(";")[0] == "W = https://www.coinmarketcap.com historical data daily close price") && (oracle_text.split(";")[4] == " return (price of Y is more than X as of Z as reported by W)")) {
+                                console.log("splitting")
+                      //        var coinName = oracle_text.split(";")[2].substring(6,3) ;
+                                var coinPrice = oracle_text.split(";")[1].substring(5, oracle_text.split(";")[1].length);
+                                var coinName = oracle_text.split(";")[2].substring(5, oracle_text.split(";")[2].length);
+                                var coinMaturity = oracle_text.split(";")[3].substring(21, oracle_text.split(";")[3].length);
+
+ 
+                                var d1 = new Date(coinMaturity);
+                                var n1 = d1.toString();
+
+                                n1 = n1.substring(16,4);
+
+                                                              console.log("here is d1: " + n1[Number(n1.length) - Number(1)]);
+                                console.log("here is d1 2" + n1);  
+                                if (n1[n1.length -1] == " "){
+                                    n1 = n1.substring(n1.length -1, 0);
+                                }
+                                console.log("this is a date format" + n1);
+                                t2 = text(coinName + " price is more than "+ coinPrice + " at Midnight " + n1 + " GMT ");
+                                t3 =  "The price of " + coinName + " is more than "+ coinPrice + " at Midnight " + n1 + "GMT "; // Jul 15 2020 GMT; 
+                                    
+                        }else{
+
+                        t2 = text(atob(Oracle[1][4]));
+                          t3 = atob(Oracle[1][4]);   
+                                            }
+
+
                                                         }
                         
 
@@ -266,9 +300,8 @@ if (firstTimeBool != 1){
 
     function display_positions(l,n){
          //   var l = window.localStorage.getItem("positionData"+keys.pub());
-         
-        console.log("firstn + "+ n);
 
+       // var 
          var y = n;
 
 
@@ -298,7 +331,7 @@ if (firstTimeBool != 1){
          var oracleLanguage = atob(JSON.parse(tempvar)[n][1][23]);
          var myStake = JSON.parse(tempvar)[n][2][1][5];
          var theirStake = JSON.parse(tempvar)[n][2][1][4];
-         var settleEarlyButton = button_maker2("Settle early (if you lost)", function() { return settleEarly() });
+
          var ctcButton = button_maker2("Settle early (if you won)", function() { return settleEarly() });
          //need to find CID
         var CID = JSON.parse(tempvar)[n][1][16];
@@ -333,12 +366,40 @@ if (firstTimeBool != 1){
 
                 positionDiv.appendChild(text("Settlement:"));
                 positionDiv.appendChild(text(" "));
-                positionDiv.appendChild(text(" "));
 
+//now we loop through the tempvar2 object
+              //  for (let j = 0,  j < tempvar2.length, j++) {
+
+
+//next find where the CID is stored
+            let i = 1;
+            do {
+              //  if (JSON.parse(tempvar)[n][1][16] == tempvar){
+                console.log("ntext is tempvar: " +JSON.parse(tempvar)[n][1][16])
+                console.log("i is : " + i + " while ntext is tempvar2: " + JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4]))
+
+                if( ('"' + JSON.parse(tempvar)[n][1][16]+ '"') == JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4])) {
+                var tempStorage = JSON.stringify(JSON.parse(tempvar2)[0][i]);
+
+
+
+                positionDiv.appendChild(text(" "));
+                var settleEarlyButton = button_maker2("Settle early (if you lost)", function() { return settleEarly(tempStorage)});
                 positionDiv.appendChild(settleEarlyButton);
 
                 positionDiv.appendChild(text(" "));
-                positionDiv.appendChild(ctcButton);
+
+                }
+                i=Number(i)+Number(1);
+
+} while (i < ( Number(JSON.parse(tempvar2).length) + Number(2)) );
+
+//}
+
+
+
+
+         //       positionDiv.appendChild(ctcButton);
                 positionDiv.appendChild(br());
                 positionDiv.appendChild(text("Event: "));
                 positionDiv.appendChild(text(oracleLanguage));
@@ -369,7 +430,7 @@ if (firstTimeBool != 1){
 
                 }
 
-
+                      
     }
 
     function display_offers(l) {
@@ -440,7 +501,9 @@ if (firstTimeBool != 1){
           
           console.log("s2c is " + s2c(h[8]));
 
-        var text = ("| Risk: ").concat(Number(s2c(h[8]).toPrecision(3))).concat(" ")+"| Reward: ".concat(Number(s2c(h[7]).toPrecision(3))).concat(" | ");
+          var implProb = (100*(s2c(h[8]) / (s2c(h[7]) + s2c(h[8])))).toPrecision(3) + "%";
+
+        var text = "| Implied Probability: ".concat(implProb).concat(" | Risk: ").concat(Number(s2c(h[8]).toPrecision(3))).concat(" ")+"| Reward: ".concat(Number(s2c(h[7]).toPrecision(3))).concat(" | ");
 
         t.innerHTML = text;
         
@@ -451,6 +514,9 @@ if (firstTimeBool != 1){
         offers.appendChild(t);
         var button = button_maker2("Accept trade", function() { display_contract(h, type) });
         button.style.display = "inline";
+
+
+
    //     offers.appendChild(text(" "));
         offers.appendChild(button);
         offers.appendChild(br());
@@ -569,7 +635,7 @@ if (firstTimeBool != 1){
     };
 
 
-    return {positionDiv: positionDiv, display_positions: display_positions, oracle_filter: oracle_filter, oracleDoc: oracleDoc, title:title, oracles: oracles, t2: t2, offers: offers, oracle_list_pull: (function() { return oracle_list_pull; }), display_oracles: display_oracles, display_oracle: display_oracle, display_offers: display_offers};
+    return {div2: div2, title1: title1, oracle_filter: oracle_filter, title: title, title0: title0, positionDiv: positionDiv, display_positions: display_positions, oracle_filter: oracle_filter, oracleDoc: oracleDoc, title:title, oracles: oracles, t2: t2, offers: offers, oracle_list_pull: (function() { return oracle_list_pull; }), display_oracles: display_oracles, display_oracle: display_oracle, display_offers: display_offers};
 
 })();
     console.log("trying to display positions");
@@ -632,10 +698,38 @@ if (firstTimeBool != 1){
         console.log("positionData in local storage removed");
     }
 
-function showPositions(){
+var tempvar2;
 
+function showPositions(){
+        abcd.positionDiv.innerHTML = "";
         internalNonce = 0;
+
+
+                            var p2p_url = url(8090, "159.89.87.58");
+                            var p2p_msg2 = ["read", 2, keys.pub()];
+                            request(p2p_msg2, p2p_url, function(X){
+                            console.log("sent message to p2p server.");
+                            console.log(JSON.stringify(X))
+                    //        var positionCTC = X;
+
+//push it to an array                    
+
+                tempvar2 = "[" + JSON.stringify(X) + "]";
+            //    var arr0 = new Array();
+                //arr0.push(tempvar2);
+
+                //arr0.push(window.localStorage.getItem("positionData"+keys.pub()));
+
+
+
+        console.log("positionCTC is " + JSON.stringify(JSON.parse(tempvar2)[0][1][4][1][4]));
+        console.log("entire ctc is " + JSON.parse(tempvar2)[0][1]);
+        //create ctc object first
+      //  abcd.storeCTC local.
+
         abcd.display_positions(window.localStorage.getItem("positionData"+keys.pub()),Number(0));
+
+});
 
 }
 
@@ -669,9 +763,76 @@ function returnOracleLanguage(x){
             }); 
 }
 
-function settleEarly(){
+function settleEarly(x){
+    
+    console.log("tryna settle early ")
+    console.log("settle early x is " + JSON.parse(x).length)
+                var sctc = keys.sign(JSON.parse(x)[4]);
+
+    //here is where we broadcast it. we need to figure out how to get sctc.
+                return variable_public_get(["txs", [-6, sctc]], function(x) {
+                //console.log(x);
+                console.log( "trying to broadcast this channel team close");
+              //  return wait_till_closed(db);
+            });
+    console.log(x);
 
 }
+
+
+function hideTradeExplorer(){
+    //here is how to construct it
+    //keys.bal_div.style.display = 'none'
+    abcd.title0.style.display = 'none';
+    abcd.positionDiv.style.display = 'none';
+    abcd.title1.style.display = 'none';
+    abcd.offers.style.display = 'none';
+    abcd.title.style.display = 'none';
+    abcd.oracle_filter.style.display = 'none';
+    abcd.oracles.style.display = 'none';
+    abcd.div2.style.display = 'none';
+}
+
+
+function showTradeExplorer(){
+    //here is how to construct it
+    //keys.bal_div.style.display = 'none'
+    abcd.title0.style.display = 'block';
+    abcd.positionDiv.style.display = 'block';
+    abcd.title1.style.display = 'block';
+    abcd.offers.style.display = 'block';
+    abcd.title.style.display = 'block';
+    abcd.oracle_filter.style.display = 'inline';
+    abcd.oracles.style.display = 'block';
+    abcd.div2.style.display = 'block';
+}
+
+function hideCreateABet(){
+    dcba.div.style.display = 'none';
+
+}
+
+function showCreateABet(){
+    dcba.div.style.display = 'block';
+    
+}
+
+function createABet(){
+    hideTradeExplorer();
+    showCreateABet();
+    // Do stuff
+
+
+}
+
+function tradeExplorer(){
+    hideCreateABet();
+    showTradeExplorer();
+
+}
+
+//hideCreateABet();
+tradeExplorer();
 
 abcd.oracle_list_pull();
 

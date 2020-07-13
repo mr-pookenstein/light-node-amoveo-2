@@ -419,6 +419,7 @@ var ZYX = (function otc_finisher2() {
         }
         return ("you will receive ").concat(s2c(your_balance)).concat(" veo, and they will receive ").concat(s2c(their_balance)).concat(" veo.");
     }
+
     function amounts_calculator(db, x) {
         var amount1 = db.channel_balance1 + x;
         var amount2 = db.channel_balance2 - x;
