@@ -28,7 +28,7 @@ var dcba = (function otc_function2() {
     div.appendChild(coin_put);
     div.appendChild(text(" "));
 
-    var coin_put = button_maker2("Sport event outcome (coming soon)", showSportEventFields);
+    var coin_put = button_maker2("Competition", showSportEventFields);
     div.appendChild(coin_put);
     div.appendChild(text(" "));
   //  div.appendChild(br());
@@ -69,8 +69,12 @@ var dcba = (function otc_function2() {
     var below = document.createElement("INPUT");
     below.type = 'checkbox';
     below.style="width:15px;height:15px;"
+var createNumber;
 
 function showCoinPutFields(){
+        createNumber = 0;
+    underDiv.innerHTML = "";
+    aboveOrBelow.innerHTML = "";
     underDiv.appendChild(br());
 
 
@@ -103,9 +107,47 @@ function showCoinPutFields(){
     aboveOrBelow.appendChild(below);
 
 
+
 }
 
+
+
 function showSportEventFields(){
+    underDiv.innerHTML = "";
+        createNumber = 1;
+   underDiv.appendChild(br());
+
+
+    underDiv.appendChild(text("Team 1: "));
+    //use this for Team A 
+    underDiv.appendChild(whichCoin);
+    underDiv.appendChild(br());
+    //use this for Team B
+
+    underDiv.appendChild(text("Team 2: "));
+    underDiv.appendChild(coinPrice);
+    underDiv.appendChild(br());
+
+    underDiv.appendChild(text("Day of event in local time (MM/DD/YYYY): "));
+    underDiv.appendChild(maturityDate1);
+    underDiv.appendChild(br());
+
+
+    underDiv.appendChild(textMyAmount);
+    textMyAmount.appendChild(myAmount);
+    underDiv.appendChild(br());
+
+    underDiv.appendChild(textTheirAmount);
+    textTheirAmount.appendChild(theirAmount);
+
+    underDiv.appendChild(br());
+    
+    underDiv.appendChild(text("You win if "));
+    underDiv.appendChild(text("Team 1 wins: "));
+    underDiv.appendChild(above);
+    underDiv.appendChild(text(" or Team 2 wins: "));
+    underDiv.appendChild(below);
+
 
 }
 
@@ -268,8 +310,19 @@ function showSportEventFields(){
     }
 
     function pre_print_offer(){
+        console.log("createNumber is " + createNumber);
+
+       if (createNumber == 0){
 
         question.value = "W = https://www.coinmarketcap.com historical data daily close price; X = $" + coinPrice.value + "; Y = " + whichCoin.value + "; Z (in MM/DD/YYYY) = " + maturityDate1.value + "; return (price of Y is more than X as of Z as reported by W)";
+
+
+        }
+
+        if (createNumber == 1){
+
+        question.value = "W = " + whichCoin.value +"; X = " + coinPrice.value + "; Y = empty; Z (in MM/DD/YYYY) = " + maturityDate1.value + "; return (Team W defeated Team X in the game that started on date Z (in local time))";
+        }
         console.log(question.value);
 
         bet_direction = document.createElement("INPUT");
@@ -328,7 +381,15 @@ function showSportEventFields(){
         startVar = Number(((event - Number(Date.now() / 1000))/600));
         //we want to be >99.9% confident that the oracle start time is after the event has happened in real life. so we add four standard deviations 
         startVar = startVar + 4*Math.sqrt(startVar);
+        if (createNumber == 0){
         oracle_starts.value = headers_object.top()[1] + Math.round(startVar);
+
+        }
+
+        if (createNumber == 1){
+        oracle_starts.value = headers_object.top()[1] + Math.round(startVar) + Number(144);
+
+        }
   //      oracle_height.value = oracle_starts.value;
 
         console.log("starts value is: " + oracle_starts.value);

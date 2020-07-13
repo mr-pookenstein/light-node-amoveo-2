@@ -212,9 +212,30 @@ if (firstTimeBool != 1){
                                 t3 =  "The price of " + coinName + " is more than "+ coinPrice + " at Midnight " + n1 + "GMT "; // Jul 15 2020 GMT; 
                                     
                         }else{
+                                console.log("1maturity is" + (oracle_text.split(";")[0].substring(5, 0) == " W = "));
+                                console.log("1maturiy is" + oracle_text.split(";")[0].substring(5, 0));
+
+                                console.log("1maturiy is" + " Z (in MM/DD/YYYY) = ");
+                            if ((oracle_text.split(";")[3].substring(21, 0) == " Z (in MM/DD/YYYY) = " ) && (oracle_text.split(";")[2].substring(5, 0) == " Y = ") && (oracle_text.split(";")[0].substring(4, 0) == "W = ") && (oracle_text.split(";")[1].substring(5, 0) == " X = ") && (oracle_text.split(";")[oracle_text.split(";").length - 1] == " return (Team W defeated Team X in the game that started on date Z (in local time))") && (oracle_text.split(";")[4] == " return (Team W defeated Team X in the game that started on date Z (in local time))")) {
+
+                                var team1 = oracle_text.split(";")[0].substring(4, oracle_text.split(";")[0].length);
+                                var team2 = oracle_text.split(";")[1].substring(5, oracle_text.split(";")[1].length);
+                                var coinMaturity = oracle_text.split(";")[3].substring(22, oracle_text.split(";")[3].length);
+
+                                t2 = text(team1 + " will defeat " + team2 + " in the game starting on " + coinMaturity + " (local time) ");
+                                t3 =  team1 + " will defeat " + team2 + " in the game starting on " + coinMaturity + " (local time) ";
+
+
+
+                            }else{
+
+
+
 
                         t2 = text(atob(Oracle[1][4]));
                           t3 = atob(Oracle[1][4]);   
+                                }
+
                                             }
 
 
@@ -307,6 +328,8 @@ if (firstTimeBool != 1){
 
          console.log("split positions");
          // console.log(JSON.stringify(l));
+
+
          var tempvar = "[" + l + "]";
   //      console.log("tempvar is " + (tempvar == undefined));
                  if (JSON.parse(tempvar)[n] == undefined) {
@@ -372,11 +395,15 @@ if (firstTimeBool != 1){
 
 
 //next find where the CID is stored
+
+if (tempvar2 != "[[-6]]"){
             let i = 1;
             do {
               //  if (JSON.parse(tempvar)[n][1][16] == tempvar){
                 console.log("ntext is tempvar: " +JSON.parse(tempvar)[n][1][16])
-                console.log("i is : " + i + " while ntext is tempvar2: " + JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4]))
+             //   console.log("i is : " + i + " while ntext is tempvar2: " + JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4]))
+
+
 
                 if( ('"' + JSON.parse(tempvar)[n][1][16]+ '"') == JSON.stringify(JSON.parse(tempvar2)[0][i][4][1][4])) {
                 var tempStorage = JSON.stringify(JSON.parse(tempvar2)[0][i]);
@@ -395,7 +422,7 @@ if (firstTimeBool != 1){
 } while (i < ( Number(JSON.parse(tempvar2).length) + Number(2)) );
 
 //}
-
+}
 
 
 
@@ -725,12 +752,13 @@ function showPositions(){
                 //arr0.push(window.localStorage.getItem("positionData"+keys.pub()));
 
 
-
+                console.log(tempvar2);
+        if( tempvar2 != "[[-6]]"){
         console.log("positionCTC is " + JSON.stringify(JSON.parse(tempvar2)[0][1][4][1][4]));
         console.log("entire ctc is " + JSON.parse(tempvar2)[0][1]);
         //create ctc object first
       //  abcd.storeCTC local.
-
+}
         abcd.display_positions(window.localStorage.getItem("positionData"+keys.pub()),Number(0));
 
 });
